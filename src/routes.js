@@ -1,8 +1,11 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+
 import Home from './components/home'
 import DetalhesPergunta from './components/detalhes-pergunta';
 import CriaPergunta from './components/cria-pergunta';
+
+import NotFound from './components/common/not-found';
 
 
 export default function Routing() {
@@ -17,7 +20,7 @@ export default function Routing() {
 				<Route path="/pergunta/:id" element={<DetalhesPergunta />} />
 				<Route path="/criar-pergunta/" element={<CriaPergunta />} />
 
-				<Route path="*" element={<h1>Not Found </h1>} />
+				<Route path="*" element={<NotFound/>} />
 			</Routes>
 		);
 

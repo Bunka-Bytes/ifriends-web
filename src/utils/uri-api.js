@@ -7,4 +7,9 @@ export const getURI = (uri, params) => {
 };
 
 const API = process.env.REACT_APP_API_URL || "/api";
+
+export const USUARIOS = `${API}/usuarios`;
 export const PERGUNTAS = `${API}/perguntas`;
+export const CURTIDAS_PERGUNTA = `${PERGUNTAS}/curtir`;
+export const RESPOSTAS = `${API}/respostas`;
+export const CURTIDAS_RESPOSTA = `${RESPOSTAS}/curtir`;

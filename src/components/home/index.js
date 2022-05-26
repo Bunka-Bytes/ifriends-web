@@ -249,11 +249,11 @@ const Home = props => {
 										</Card>
 									</Skeleton>
 									{/* <List.Item.Meta
-                avatar={<Avatar src={item.avatar} />}
-                title={<a href={item.href}>{item.title}</a>}
-                description={item.description}
-              />
-              {item.content} */}
+										avatar={<Avatar src={item.avatar} />}
+										title={<a href={item.href}>{item.title}</a>}
+										description={item.description}
+									/>
+									{item.content} */}
 								</List.Item>
 							)}
 						/>

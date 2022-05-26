@@ -1,16 +1,19 @@
 import {
   getResource,
-  postResource
+  postResource,
+  putResource,
+  deleteResource
 } from './utils';
 import { PERGUNTAS } from '../utils/uri-api';
 
-// export const getTriggerAdministrativa = (codTrigger) =>
-//   getResource(`${PERGUNTAS}/${encodeURIComponent(codTrigger)}`);
+export const getPergunta = (codPergunta) =>
+  getResource(`${PERGUNTAS}/${encodeURIComponent(codPergunta)}`);
 
 export const getPerguntas = (filtro) =>
-  getResource(`${PERGUNTAS}/buscar${filtro}`);
+  getResource(`${PERGUNTAS}${filtro}`);
 
-  // export const getPerguntaPorId = (id) => 
-  // getResource(`${PERGUNTAS}/${id}`);
+export const postPergunta = (pergunta) => postResource(`${PERGUNTAS}`, pergunta);
 
-export const postPergunta = (pergunta) => postResource(`${PERGUNTAS}/salvar`, pergunta);
+export const putResposta = (codPergunta, pergunta) => putResource(`${PERGUNTAS}/${encodeURIComponent(codPergunta)}`, pergunta);
+
+export const deleteResposta = (codPergunta) => deleteResource(`${PERGUNTAS}/${encodeURIComponent(codPergunta)}`);

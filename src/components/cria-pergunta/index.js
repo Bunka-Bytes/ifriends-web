@@ -1,4 +1,5 @@
 import React, { useEffect, useState, Fragment } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Grid } from 'react-flexbox-grid'
 import { Col, Row } from 'react-bootstrap'
 import {
@@ -138,6 +139,8 @@ const CriaPergunta = props => {
 
   const { previewVisible, previewImage, previewTitle, fileList } = stateUpload;
 
+  const navigate = useNavigate();
+  
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -154,235 +157,337 @@ const CriaPergunta = props => {
         message.success((`Pergunta - ${request.data.titulo} - salva com sucesso.`))
       })
   }
+
   return (
-    <Fragment>
-
-      <Grid fluid style={{ width: '80%' }}>
-        <Title level={3} title>
-          Faça a sua pergunta
-        </Title>
-        <Row between="xs" top="xs">
-          <Col xs={12} sm={12} xl={8}>
-            <Row between="xs" top="xs">
-              <Space direction="vertical" size="middle">
-                {/* <ImgCrop rotate >
-          <Upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-            listType="picture-card"
-            fileList={fileList}
-            onChange={onChange}
-            onPreview={onPreview}
-          >
-            {fileList.length < 5 && '+ Upload'}
-          </Upload>
-        </ImgCrop>
-        <Dragger {...draggerUpload} fileList={fileList}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">Click or drag file to this area to upload</p>
-          <p className="ant-upload-hint">
-            Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-            band files
-          </p>
-        </Dragger> */}
-                <Col xs={12} sm={12}>
-                  <Card
-                    title={
-                      <Fragment>
-                        <GoPencil />
-                        &nbsp; Título
-                        <Meta description={'Informe um título sucinto que ajude a compreender melhor o problema.'} />
-                      </Fragment>
-                    }
-                  >
-                    <Input placeholder={'Escreva aqui'} bordered={false} allowClear={true} showCount maxLength={50} name={'titulo'} onChange={e => alteraCampoTipo(e.target.value, e.target.name)} value={campos.titulo} />
-
-                  </Card>
-                </Col>
-                <Col xs={12} sm={12}>
-                  <Card title={<Meta title={
-                    <Fragment>
-                      <ImNewspaper />
-                      &nbsp; Descrição do Problema</Fragment>}
-                    description={'Inclua todas as informações necessárias para alguém conseguir responder sua pergunta.'} />}>
-                    <TextArea placeholder={'Escreva aqui'} bordered={false} allowClear={true} showCount maxLength={25000} name={"texto"} autoSize={{ minRows: 5, maxRows: 25 }} value={campos.texto} onChange={e => alteraCampoTipo(e.target.value, e.target.name)}
-                    />
-
-                  </Card>
-                </Col>
-                <Col xs={12} sm={12}>
-                  <ImgCrop rotate modalTitle={"Editar Foto"} modalCancel={"Cancelar"} modalOk={"Confirmar"} beforeCrop={(file) => {
-                    // console.log('bbb', file)
-                    const isLt2M = file.size / 1024 / 1024 < 1;
-                    if (!isLt2M) {
-                      message.error('A imagem deve ser menor que 1MB');
-                    }
-                    return isLt2M;
-                  }}
-                  >
-                    <Dragger
+		<Fragment>
+			<Grid fluid style={{ width: '80%' }}>
+				<Title level={3} title>
+					Faça a sua pergunta
+				</Title>
+				<Row between="xs" top="xs">
+					<Col xs={12} sm={12} xl={8}>
+						<Row between="xs" top="xs">
+							<Space direction="vertical" size="middle">
+								{/* <ImgCrop rotate >
+                    <Upload
                       action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
                       listType="picture-card"
                       fileList={fileList}
-                      onPreview={handlePreview}
-                      onChange={handleChange}
-                      // disabled={fileList.length >= 1}
-                      // beforeUpload={file => {
-                      //   console.log('DASASPO', file)
-                      //   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-                      //   if (!isJpgOrPng) {
-                      //     message.error('You can only upload JPG/PNG file!');
-                      //   }
-                      //   const isLt2M = file.size / 1024 / 1024 < 0.00001;
-                      //   if (!isLt2M) {
-                      //     message.error('Image must smaller than 2MB!');
-                      //   }
-                      //   return (isJpgOrPng && isLt2M) || Upload.LIST_IGNORE;
-                      // }}
-                      // progress={({
-                      //   strokeColor: {
-                      //     '0%': '#108ee9',
-                      //     '100%': '#87d068',
-                      //   },
-                      //   strokeWidth: 3,
-                      //   format: percent => `${parseFloat(percent.toFixed(2))}%`,
-                      // })}
-                      maxCount={1}
-                      style={{ marginBottom: '1rem' }}
+                      onChange={onChange}
+                      onPreview={onPreview}
                     >
-                      {fileList.length >= 1 ?
-                        <div style={{ padding: '0.25rem' }}>
-                          <p className="ant-upload-text">Limite de imagens alcançado!</p>
-                          <p className="ant-upload-hint">
-                            Adicionar novas imagens substituirá a última.
-                          </p>
-                        </div> :
-                        <div style={{ padding: '0.25rem' }} >
-                          <p className="ant-upload-drag-icon">
-                            <InboxOutlined />
-                          </p>
-                          <p className="ant-upload-text">Clique ou arraste a imagem para esta área para fazer upload</p>
-                          <p className="ant-upload-hint">
-                            Suporta apenas fotos com menos de 1mb
-                          </p>
-                        </div>}
-                    </Dragger>
+                      {fileList.length < 5 && '+ Upload'}
+                    </Upload>
                   </ImgCrop>
-                </Col>
-                <Col xs={12} sm={12}>
-                  <Card title={<Meta title={
-                    <Fragment>
-                      <FiChevronDown />
-                      &nbsp; Categorias</Fragment>}
-                    description={'Selecione a categoria que melhor representa a sua pergunta.'} />}>
-                    <Select placeholder={'Escreva aqui'} bordered={false} allowClear={true} />
-                    <Select
-                      showSearch
-                      placeholder="Selecione uma categoria"
-                      optionFilterProp="children"
-                      name={'id_categoria'}
-                      onChange={alteraCampoTipo}
-                      value={campos.id_categoria}
-                      // onSearch={onSearch}
-                      filterOption={(input, option) =>
-                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                      }
-                      bordered={false} allowClear={true}
-                      style={{ width: '100%' }}
-                    >
-                      <Option value="Ahaa">AHAN</Option>
-                      <Option value="UHUMM">Uhumm</Option>
-                      <Option value="é">é</Option>
-                    </Select>
-                  </Card>
-
-                </Col>
-                <Col xs={12} sm={12}>
-                  <Card title={<Meta title={
-                    <Fragment>
-                      <FiTag />
-                      &nbsp; Tags</Fragment>}
-                    description={'Adicione algumas tags para complementar a sua pergunta.'} />}>
-                    <TagGroup tags={campos.tags} alteraCampoTipo={alteraCampoTipo} />
-                  </Card>
-                </Col>
-                <Col xs={12} sm={12} className="d-flex justify-content-between">
-                  <Button type="primary" danger>Cancelar</Button>
-                  <Button type="primary" onClick={() => salvar(campos)}>Confirmar</Button>
-                  {console.log(campos)}
-                </Col>
-              </Space>
-            </Row>
-          </Col>
-          <Col xs={12} sm={12} xl={4}>
-            <Typography>
-              <Paragraph>
-                <pre style={{ padding: '1.25rem' }}>
-                  <Title level={4} className="text-center">
-                    <ImCheckboxChecked /> &nbsp;Como fazer uma boa pergunta?
-                  </Title>
-                  <Divider />
-                  <Title level={5}>
-                    1.  Resuma o seu problema
-                  </Title>
-                  <Paragraph>
-                    <ul>
-                      <li>
-                        Antes de fazer uma pergunta tenha em mente "qual é o problema". Para isso é recomendado que primeiramente se atente a reunir detalhes e informações que poderão ser uteis.
-                      </li>
-                      <li>
-                        Considere que uma pergunta não se caracteriza como boa devido ao seu tamanho, mas sim devido às informações fornecidas.
-                      </li>
-                      <li>
-                        Opte por um título sucinto e detalhado, e recorra a termos chaves, as tags podem ajudar nesse sentido.
-                      </li>
-                    </ul>
-                  </Paragraph>
-                  <Title level={5}>
-                    2.  Descreva o seu problema
-                  </Title>
-                  <Paragraph>
-                    <ul>
-                      <li>
-                        Apresente seu problema com o máximo de detalhes, o que você já tentou e conte-nos o que você conseguiu até então.
-                      </li>
-                      <li>
-                        Lembre-se que conseguirá melhores respostas quando você fornecer e detalhar melhor o seus dados.
-                      </li>
-                      <li>
-                        Quando for apropriado, faça uso de imagens para exemplificar melhor o problema.
-                      </li>
-                    </ul>
-                  </Paragraph>
-                  <Title level={5}>
-                    3.  Objetivo final
-                  </Title>
-                  <Paragraph>
-                    <ul>
-                      <li>
-                        O que é preciso para chegar a um resultado viável, tente ser o mais claro possível em expressar qual é o seu objetivo.
-                      </li>
-                    </ul>
-                  </Paragraph>
-                </pre>
-
-              </Paragraph>
-            </Typography>
-          </Col>
-        </Row>
-      </Grid>
-      <Modal
-        visible={previewVisible}
-        title={previewTitle}
-        footer={null}
-        onCancel={handleCancel}
-      >
-        <Col className="d-flex align-items-center flex-column">
-          <img alt="example" style={{ width: '90%', borderRadius: '0.25rem' }} src={previewImage} />
-        </Col>
-      </Modal>
-    </Fragment >);
+                  <Dragger {...draggerUpload} fileList={fileList}>
+                    <p className="ant-upload-drag-icon">
+                      <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
+                    <p className="ant-upload-hint">
+                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
+                      band files
+                    </p>
+                  </Dragger> */}
+								<Col xs={12} sm={12}>
+									<Card
+									// title={
+									//   <Fragment>
+									//     <GoPencil />
+									//     &nbsp; Título
+									//     <Meta description={'Informe um título sucinto que ajude a compreender melhor o problema.'} />
+									//     'Informe um título sucinto que ajude a compreender melhor o problema.'
+									//   </Fragment>
+									// }
+									>
+										<Fragment>
+											<Paragraph strong>
+												<GoPencil />
+												&nbsp; Título
+												<Meta
+													description={
+														'Informe um título sucinto que ajude a compreender melhor o problema.'
+													}
+												/>
+											</Paragraph>
+										</Fragment>
+										<Divider />
+										<Input
+											placeholder={'Escreva aqui'}
+											bordered={false}
+											allowClear={true}
+											showCount
+											maxLength={50}
+											name={'titulo'}
+											onChange={e =>
+												alteraCampoTipo(e.target.value, e.target.name)
+											}
+											value={campos.titulo}
+										/>
+									</Card>
+								</Col>
+								<Col xs={12} sm={12}>
+									<Card
+										title={
+											<Meta
+												title={
+													<Fragment>
+														<ImNewspaper />
+														&nbsp; Descrição do Problema
+													</Fragment>
+												}
+												description={
+													'Inclua todas as informações necessárias para alguém conseguir responder sua pergunta.'
+												}
+											/>
+										}
+									>
+										<TextArea
+											placeholder={'Escreva aqui'}
+											bordered={false}
+											allowClear={true}
+											showCount
+											maxLength={25000}
+											name={'texto'}
+											autoSize={{ minRows: 5, maxRows: 25 }}
+											value={campos.texto}
+											onChange={e =>
+												alteraCampoTipo(e.target.value, e.target.name)
+											}
+										/>
+									</Card>
+								</Col>
+								<Col xs={12} sm={12}>
+									<ImgCrop
+										rotate
+										modalTitle={'Editar Foto'}
+										modalCancel={'Cancelar'}
+										modalOk={'Confirmar'}
+										beforeCrop={file => {
+											// console.log('bbb', file)
+											const isLt2M = file.size / 1024 / 1024 < 1;
+											if (!isLt2M) {
+												message.error('A imagem deve ser menor que 1MB');
+											}
+											return isLt2M;
+										}}
+									>
+										<Dragger
+											action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+											listType="picture-card"
+											fileList={fileList}
+											onPreview={handlePreview}
+											onChange={handleChange}
+											// disabled={fileList.length >= 1}
+											// beforeUpload={file => {
+											//   console.log('DASASPO', file)
+											//   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+											//   if (!isJpgOrPng) {
+											//     message.error('You can only upload JPG/PNG file!');
+											//   }
+											//   const isLt2M = file.size / 1024 / 1024 < 0.00001;
+											//   if (!isLt2M) {
+											//     message.error('Image must smaller than 2MB!');
+											//   }
+											//   return (isJpgOrPng && isLt2M) || Upload.LIST_IGNORE;
+											// }}
+											// progress={({
+											//   strokeColor: {
+											//     '0%': '#108ee9',
+											//     '100%': '#87d068',
+											//   },
+											//   strokeWidth: 3,
+											//   format: percent => `${parseFloat(percent.toFixed(2))}%`,
+											// })}
+											maxCount={1}
+											style={{ marginBottom: '1rem' }}
+										>
+											{fileList.length >= 1 ? (
+												<div style={{ padding: '0.25rem' }}>
+													<p className="ant-upload-text">
+														Limite de imagens alcançado!
+													</p>
+													<p className="ant-upload-hint">
+														Adicionar novas imagens substituirá a última.
+													</p>
+												</div>
+											) : (
+												<div style={{ padding: '0.25rem' }}>
+													<p className="ant-upload-drag-icon">
+														<InboxOutlined />
+													</p>
+													<p className="ant-upload-text">
+														Clique ou arraste a imagem para esta área para fazer
+														upload
+													</p>
+													<p className="ant-upload-hint">
+														Suporta apenas fotos com menos de 1mb
+													</p>
+												</div>
+											)}
+										</Dragger>
+									</ImgCrop>
+								</Col>
+								<Col xs={12} sm={12}>
+									<Card
+										title={
+											<Meta
+												title={
+													<Fragment>
+														<FiChevronDown />
+														&nbsp; Categorias
+													</Fragment>
+												}
+												description={
+													'Selecione a categoria que melhor representa a sua pergunta.'
+												}
+											/>
+										}
+									>
+										<Select
+											placeholder={'Escreva aqui'}
+											bordered={false}
+											allowClear={true}
+										/>
+										<Select
+											showSearch
+											placeholder="Selecione uma categoria"
+											optionFilterProp="children"
+											name={'id_categoria'}
+											onChange={alteraCampoTipo}
+											value={campos.id_categoria}
+											// onSearch={onSearch}
+											filterOption={(input, option) =>
+												option.children
+													.toLowerCase()
+													.indexOf(input.toLowerCase()) >= 0
+											}
+											bordered={false}
+											allowClear={true}
+											style={{ width: '100%' }}
+										>
+											<Option value="Ahaa">AHAN</Option>
+											<Option value="UHUMM">Uhumm</Option>
+											<Option value="é">é</Option>
+										</Select>
+									</Card>
+								</Col>
+								<Col xs={12} sm={12}>
+									<Card
+										title={
+											<Meta
+												title={
+													<Fragment>
+														<FiTag />
+														&nbsp; Tags
+													</Fragment>
+												}
+												description={
+													'Adicione algumas tags para complementar a sua pergunta.'
+												}
+											/>
+										}
+									>
+										<TagGroup
+											tags={campos.tags}
+											alteraCampoTipo={alteraCampoTipo}
+										/>
+									</Card>
+								</Col>
+								<Col xs={12} sm={12} className="d-flex justify-content-between">
+									<Button
+										type="primary"
+										danger
+										onClick={() => navigate('/')}
+									>
+										Cancelar
+									</Button>
+									<Button type="primary" onClick={() => salvar(campos)}>
+										Confirmar
+									</Button>
+									{console.log(campos)}
+								</Col>
+							</Space>
+						</Row>
+					</Col>
+					<Col xs={12} sm={12} xl={4}>
+						<Typography>
+							<Paragraph>
+								<pre style={{ padding: '1.25rem' }}>
+									<Title level={4} className="text-center">
+										<ImCheckboxChecked /> &nbsp;Como fazer uma boa pergunta?
+									</Title>
+									<Divider />
+									<Title level={5}>1. Resuma o seu problema</Title>
+									<Paragraph>
+										<ul>
+											<li>
+												Antes de fazer uma pergunta tenha em mente "qual é o
+												problema". Para isso é recomendado que primeiramente se
+												atente a reunir detalhes e informações que poderão ser
+												uteis.
+											</li>
+											<li>
+												Considere que uma pergunta não se caracteriza como boa
+												devido ao seu tamanho, mas sim devido às informações
+												fornecidas.
+											</li>
+											<li>
+												Opte por um título sucinto e detalhado, e recorra a
+												termos chaves, as tags podem ajudar nesse sentido.
+											</li>
+										</ul>
+									</Paragraph>
+									<Title level={5}>2. Descreva o seu problema</Title>
+									<Paragraph>
+										<ul>
+											<li>
+												Apresente seu problema com o máximo de detalhes, o que
+												você já tentou e conte-nos o que você conseguiu até
+												então.
+											</li>
+											<li>
+												Lembre-se que conseguirá melhores respostas quando você
+												fornecer e detalhar melhor o seus dados.
+											</li>
+											<li>
+												Quando for apropriado, faça uso de imagens para
+												exemplificar melhor o problema.
+											</li>
+										</ul>
+									</Paragraph>
+									<Title level={5}>3. Objetivo final</Title>
+									<Paragraph>
+										<ul>
+											<li>
+												O que é preciso para chegar a um resultado viável, tente
+												ser o mais claro possível em expressar qual é o seu
+												objetivo.
+											</li>
+										</ul>
+									</Paragraph>
+								</pre>
+							</Paragraph>
+						</Typography>
+					</Col>
+				</Row>
+			</Grid>
+			<Modal
+				visible={previewVisible}
+				title={previewTitle}
+				footer={null}
+				onCancel={handleCancel}
+			>
+				<Col className="d-flex align-items-center flex-column">
+					<img
+						alt="example"
+						style={{ width: '90%', borderRadius: '0.25rem' }}
+						src={previewImage}
+					/>
+				</Col>
+			</Modal>
+		</Fragment>
+	);
 }
 
 export default CriaPergunta;

@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { useNavigate } from 'react-router-dom';
 // ------- COMPONENTS -----
 // Antd and Bootstrap
 import Container from 'react-bootstrap/Container';
@@ -16,6 +17,7 @@ import {
 
 
 const Banner = props => {
+	const navigate = useNavigate();
 	return (
 		<>
 			<Card style={{}}>
@@ -47,6 +49,7 @@ const Banner = props => {
 													style={{ marginRight: '0.25rem' }}
 												/>
 											}
+											onClick={() => navigate('/criar-pergunta')}
 											className="layout-background"
 										>
 											Perguntar
@@ -56,6 +59,7 @@ const Banner = props => {
 											icon={
 												<IoCreateOutline style={{ marginRight: '0.25rem' }} />
 											}
+											onClick={() => navigate('/eventos')}
 											className="layout-background"
 										>
 											Ver eventos
