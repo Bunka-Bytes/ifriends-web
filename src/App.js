@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 // ------- STYLES -----
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
@@ -14,22 +14,14 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 
 // Created 
-import Home from './components/home';
 import MenuSup from './components/menus/menu-sup';
 import MenuSide from './components/menus/menu-side';
 import Contato from './components/contato'
-import DetalhesPergunta from './components/detalhes-pergunta';
 import Routing from './routes';
 
 
 
 // ------ LOCALE -------
-// import enUS from 'antd/lib/locale/en_US';
-// import ptBR from 'antd/lib/locale/pt_BR';
-// import moment from 'moment';
-// import 'moment/locale/en-us';
-
-// moment.locale('pt');
 
 
 // Destructuring
@@ -44,7 +36,6 @@ function App() {
 
 
 	// ------- FUNCTIONS ------
-
 	
 
 	return (

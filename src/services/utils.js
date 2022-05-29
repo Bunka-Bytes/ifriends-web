@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export function ROOT_URL() {
-  return 'https://ifriends-api.herokuapp.com';
+  return process.env.REACT_APP_API_URL;
 }
 
 export function postResource(resource, body, config, newInstance) {

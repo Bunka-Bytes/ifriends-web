@@ -3,24 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { Grid } from 'react-flexbox-grid'
 import { Col, Row } from 'react-bootstrap'
 import {
-  Tooltip,
-  Skeleton,
-  Switch,
-  Card,
-  Avatar,
-  Divider,
-  Tag,
-  Button,
-  Typography,
-  Menu, Dropdown, Space, List, Empty, Input, Upload, message, Modal, Select
+	Card,
+	Divider,
+	Button,
+	Typography,
+	Space, Input, Upload, message, Modal, Select
 } from 'antd'
 import { InboxOutlined, PlusOutlined } from '@ant-design/icons';
 import ImgCrop from 'antd-img-crop';
-import { TweenOneGroup } from 'rc-tween-one';
-import { FaRegThumbsUp, FaRegComment, FaRegEye, FaRegNewspaper } from 'react-icons/fa'
-import { IoIosUndo } from 'react-icons/io'
-import { FiMoreVertical, FiTrash2, FiPlusCircle, FiChevronDown, FiTag } from 'react-icons/fi'
-import { GoMegaphone, GoPencil } from 'react-icons/go'
+import { FiChevronDown, FiTag } from 'react-icons/fi'
+import { GoPencil } from 'react-icons/go'
 import { ImNewspaper, ImCheckboxChecked } from 'react-icons/im'
 
 import 'antd/dist/antd.css'
@@ -28,137 +20,137 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import TagGroup from '../common/tag-group';
 
 import { postPergunta } from '../../services/perguntas';
+import CardCadastro from '../common/card-cadastro';
 
 const CriaPergunta = props => {
-  const { Meta } = Card
-  const { Title, Paragraph, Text, Link } = Typography;
-  const { TextArea } = Input;
-  const { Dragger } = Upload;
-  const { Option } = Select;
+	const { Title, Paragraph, Text, Link } = Typography;
+	const { TextArea } = Input;
+	const { Dragger } = Upload;
+	const { Option } = Select;
 
-  const [stateUpload, setStateUpload] = useState({
-    previewVisible: false,
-    previewImage: '',
-    previewTitle: '',
-    fileList: []
-  })
+	const [stateUpload, setStateUpload] = useState({
+		previewVisible: false,
+		previewImage: '',
+		previewTitle: '',
+		fileList: []
+	})
 
-  const [campos, setCampos] = useState({
-    tags: []
-  })
+	const [campos, setCampos] = useState({
+		tags: []
+	})
 
-  const alteraCampoTipo = (valor, campo) => {
-    console.log(campo, valor)
-    setCampos({
-      ...campos, [campo]: valor
-    })
-  }
+	const alteraCampoTipo = (valor, campo) => {
+		console.log(campo, valor)
+		setCampos({
+			...campos, [campo]: valor
+		})
+	}
 
-  const getBase64 = file => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    });
-  }
+	const getBase64 = file => {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+			reader.readAsDataURL(file);
+			reader.onload = () => resolve(reader.result);
+			reader.onerror = error => reject(error);
+		});
+	}
 
-  const handleCancel = () => setStateUpload({ ...stateUpload, previewVisible: false });
+	const handleCancel = () => setStateUpload({ ...stateUpload, previewVisible: false });
 
-  const handlePreview = async file => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
-    }
+	const handlePreview = async file => {
+		if (!file.url && !file.preview) {
+			file.preview = await getBase64(file.originFileObj);
+		}
 
-    setStateUpload({
-      ...stateUpload,
-      previewImage: file.url || file.preview,
-      previewVisible: true,
-      previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-    });
-  };
+		setStateUpload({
+			...stateUpload,
+			previewImage: file.url || file.preview,
+			previewVisible: true,
+			previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
+		});
+	};
 
-  const handleChange = (info) => {
-    const { file } = info
+	const handleChange = (info) => {
+		const { file } = info
 
-    if (info.file.status === 'done') {
-      message.success(`${info.file.name} arquivo enviado com sucesso`);
-    } else if (info.file.status === 'error') {
-      message.error(`${info.file.name} arquivo enviado com falha.`);
-    }
+		if (info.file.status === 'done') {
+			message.success(`${info.file.name} arquivo enviado com sucesso`);
+		} else if (info.file.status === 'error') {
+			message.error(`${info.file.name} arquivo enviado com falha.`);
+		}
 
-    const isLt2M = file.size / 1024 / 1024 < 1;
-    // console.log(isLt2M)
-    if (isLt2M) {
-      setStateUpload({ ...stateUpload, fileList: info.fileList })
-    }
-  };
+		const isLt2M = file.size / 1024 / 1024 < 1;
+		// console.log(isLt2M)
+		if (isLt2M) {
+			setStateUpload({ ...stateUpload, fileList: info.fileList })
+		}
+	};
 
-  // const draggerUpload = {
-  //   name: 'file',
-  //   multiple: true,
-  //   listType: "picture-card",
-  //   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  //   onChange(info) {
-  //     const { status } = info.file;
-  //     if (status !== 'uploading') {
-  //       console.log(info.file, info.fileList);
-  //     }
-  //     if (status === 'done') {
-  //       message.success(`${info.file.name} file uploaded successfully.`);
-  //     } else if (status === 'error') {
-  //       message.error(`${info.file.name} file upload failed.`);
-  //     }
-  //   },
-  //   onDrop(e) {
-  //     console.log('Dropped files', e.dataTransfer.files);
-  //   },
-  // };
+	// const draggerUpload = {
+	//   name: 'file',
+	//   multiple: true,
+	//   listType: "picture-card",
+	//   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+	//   onChange(info) {
+	//     const { status } = info.file;
+	//     if (status !== 'uploading') {
+	//       console.log(info.file, info.fileList);
+	//     }
+	//     if (status === 'done') {
+	//       message.success(`${info.file.name} file uploaded successfully.`);
+	//     } else if (status === 'error') {
+	//       message.error(`${info.file.name} file upload failed.`);
+	//     }
+	//   },
+	//   onDrop(e) {
+	//     console.log('Dropped files', e.dataTransfer.files);
+	//   },
+	// };
 
 
-  // ----------------------
+	// ----------------------
 
-  // const onChange = ({ fileList: newFileList }) => {
-  //   setStateUpload({ ...stateUpload, newFileList });
-  // };
+	// const onChange = ({ fileList: newFileList }) => {
+	//   setStateUpload({ ...stateUpload, newFileList });
+	// };
 
-  // const onPreview = async file => {
-  //   let src = file.url;
-  //   if (!src) {
-  //     src = await new Promise(resolve => {
-  //       const reader = new FileReader();
-  //       reader.readAsDataURL(file.originFileObj);
-  //       reader.onload = () => resolve(reader.result);
-  //     });
-  //   }
-  //   const image = new Image();
-  //   image.src = src;
-  //   const imgWindow = window.open(src);
-  //   imgWindow.document.write(image.outerHTML);
-  // };
+	// const onPreview = async file => {
+	//   let src = file.url;
+	//   if (!src) {
+	//     src = await new Promise(resolve => {
+	//       const reader = new FileReader();
+	//       reader.readAsDataURL(file.originFileObj);
+	//       reader.onload = () => resolve(reader.result);
+	//     });
+	//   }
+	//   const image = new Image();
+	//   image.src = src;
+	//   const imgWindow = window.open(src);
+	//   imgWindow.document.write(image.outerHTML);
+	// };
 
-  const { previewVisible, previewImage, previewTitle, fileList } = stateUpload;
+	const { previewVisible, previewImage, previewTitle, fileList } = stateUpload;
 
-  const navigate = useNavigate();
-  
-  const uploadButton = (
-    <div>
-      <PlusOutlined />
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </div>
-  );
+	const navigate = useNavigate();
 
-  const salvar = pergunta => {
-    let perguntaEntity = { ...pergunta, usuario: 2, categoria: 1 }
-    postPergunta(perguntaEntity)
-      .then((request) => {
-        // atualizaData(request.data)
-        // callback && callback();
-        message.success((`Pergunta - ${request.data.titulo} - salva com sucesso.`))
-      })
-  }
+	const uploadButton = (
+		<div>
+			<PlusOutlined />
+			<div style={{ marginTop: 8 }}>Upload</div>
+		</div>
+	);
 
-  return (
+	const salvar = pergunta => {
+		let perguntaEntity = { ...pergunta, usuario: 2, categoria: 1 }
+		postPergunta(perguntaEntity)
+			.then((request) => {
+				// atualizaData(request.data)
+				// callback && callback();
+				message.success((`Pergunta - ${request.data.titulo} - salva com sucesso.`))
+			})
+	}
+
+	return (
 		<Fragment>
 			<Grid fluid style={{ width: '80%' }}>
 				<Title level={3} title>
@@ -168,94 +160,47 @@ const CriaPergunta = props => {
 					<Col xs={12} sm={12} xl={8}>
 						<Row between="xs" top="xs">
 							<Space direction="vertical" size="middle">
-								{/* <ImgCrop rotate >
-                    <Upload
-                      action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                      listType="picture-card"
-                      fileList={fileList}
-                      onChange={onChange}
-                      onPreview={onPreview}
-                    >
-                      {fileList.length < 5 && '+ Upload'}
-                    </Upload>
-                  </ImgCrop>
-                  <Dragger {...draggerUpload} fileList={fileList}>
-                    <p className="ant-upload-drag-icon">
-                      <InboxOutlined />
-                    </p>
-                    <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                    <p className="ant-upload-hint">
-                      Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                      band files
-                    </p>
-                  </Dragger> */}
 								<Col xs={12} sm={12}>
-									<Card
-									// title={
-									//   <Fragment>
-									//     <GoPencil />
-									//     &nbsp; Título
-									//     <Meta description={'Informe um título sucinto que ajude a compreender melhor o problema.'} />
-									//     'Informe um título sucinto que ajude a compreender melhor o problema.'
-									//   </Fragment>
-									// }
-									>
-										<Fragment>
-											<Paragraph strong>
-												<GoPencil />
-												&nbsp; Título
-												<Meta
-													description={
-														'Informe um título sucinto que ajude a compreender melhor o problema.'
-													}
-												/>
-											</Paragraph>
-										</Fragment>
-										<Divider />
-										<Input
-											placeholder={'Escreva aqui'}
-											bordered={false}
-											allowClear={true}
-											showCount
-											maxLength={50}
-											name={'titulo'}
-											onChange={e =>
-												alteraCampoTipo(e.target.value, e.target.name)
-											}
-											value={campos.titulo}
-										/>
-									</Card>
-								</Col>
-								<Col xs={12} sm={12}>
-									<Card
-										title={
-											<Meta
-												title={
-													<Fragment>
-														<ImNewspaper />
-														&nbsp; Descrição do Problema
-													</Fragment>
+									{CardCadastro({
+										icone: <GoPencil />,
+										titulo: 'Título',
+										descricao: 'Informe um título sucinto que ajude a compreender melhor o problema.',
+										children:
+											<Input
+												placeholder={'Escreva aqui'}
+												bordered={false}
+												allowClear={true}
+												showCount
+												maxLength={50}
+												name={'titulo'}
+												onChange={e =>
+													alteraCampoTipo(e.target.value, e.target.name)
 												}
-												description={
-													'Inclua todas as informações necessárias para alguém conseguir responder sua pergunta.'
-												}
+												value={campos.titulo}
 											/>
-										}
-									>
-										<TextArea
-											placeholder={'Escreva aqui'}
-											bordered={false}
-											allowClear={true}
-											showCount
-											maxLength={25000}
-											name={'texto'}
-											autoSize={{ minRows: 5, maxRows: 25 }}
-											value={campos.texto}
-											onChange={e =>
-												alteraCampoTipo(e.target.value, e.target.name)
-											}
-										/>
-									</Card>
+									})}
+								</Col>
+
+								<Col xs={12} sm={12}>
+									<CardCadastro
+										icone={<ImNewspaper />}
+										titulo='Descrição do Problema'
+										descricao='Inclua todas as informações necessárias para alguém conseguir responder sua pergunta.'
+										children={
+											<TextArea
+												placeholder={'Escreva aqui'}
+												bordered={false}
+												allowClear={true}
+												showCount
+												maxLength={25000}
+												name={'texto'}
+												autoSize={{ minRows: 5, maxRows: 25 }}
+												value={campos.texto}
+												onChange={e =>
+													alteraCampoTipo(e.target.value, e.target.name)
+												}
+											/>}
+									/>
 								</Col>
 								<Col xs={12} sm={12}>
 									<ImgCrop
@@ -329,71 +274,47 @@ const CriaPergunta = props => {
 									</ImgCrop>
 								</Col>
 								<Col xs={12} sm={12}>
-									<Card
-										title={
-											<Meta
-												title={
-													<Fragment>
-														<FiChevronDown />
-														&nbsp; Categorias
-													</Fragment>
+									{CardCadastro({
+										icone: <FiChevronDown />,
+										titulo: 'Categorias',
+										descricao: 'Selecione a categoria que melhor representa a sua pergunta.',
+										children:
+											<Select
+												showSearch
+												placeholder="Selecione uma categoria"
+												optionFilterProp="children"
+												name={'id_categoria'}
+												onChange={alteraCampoTipo}
+												value={campos.id_categoria}
+												// onSearch={onSearch}
+												filterOption={(input, option) =>
+													option.children
+														.toLowerCase()
+														.indexOf(input.toLowerCase()) >= 0
 												}
-												description={
-													'Selecione a categoria que melhor representa a sua pergunta.'
-												}
-											/>
-										}
-									>
-										<Select
-											placeholder={'Escreva aqui'}
-											bordered={false}
-											allowClear={true}
-										/>
-										<Select
-											showSearch
-											placeholder="Selecione uma categoria"
-											optionFilterProp="children"
-											name={'id_categoria'}
-											onChange={alteraCampoTipo}
-											value={campos.id_categoria}
-											// onSearch={onSearch}
-											filterOption={(input, option) =>
-												option.children
-													.toLowerCase()
-													.indexOf(input.toLowerCase()) >= 0
-											}
-											bordered={false}
-											allowClear={true}
-											style={{ width: '100%' }}
-										>
-											<Option value="Ahaa">AHAN</Option>
-											<Option value="UHUMM">Uhumm</Option>
-											<Option value="é">é</Option>
-										</Select>
-									</Card>
+												bordered={false}
+												allowClear={true}
+												style={{ width: '100%' }}
+											>
+												<Option value="Ahaa">AHAN</Option>
+												<Option value="UHUMM">Uhumm</Option>
+												<Option value="é">é</Option>
+											</Select>
+									})}
 								</Col>
 								<Col xs={12} sm={12}>
-									<Card
-										title={
-											<Meta
-												title={
-													<Fragment>
-														<FiTag />
-														&nbsp; Tags
-													</Fragment>
-												}
-												description={
-													'Adicione algumas tags para complementar a sua pergunta.'
-												}
+									{CardCadastro({
+										icone: <FiTag />,
+										titulo: 'Tags',
+										descricao: 'Adicione algumas tags para complementar a sua pergunta.',
+										children:
+											<TagGroup
+												tags={campos.tags}
+												alteraCampoTipo={alteraCampoTipo}
 											/>
-										}
-									>
-										<TagGroup
-											tags={campos.tags}
-											alteraCampoTipo={alteraCampoTipo}
-										/>
-									</Card>
+									})}
 								</Col>
+
 								<Col xs={12} sm={12} className="d-flex justify-content-between">
 									<Button
 										type="primary"

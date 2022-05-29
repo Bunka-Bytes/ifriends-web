@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './styles.css'
 
 // ------- COMPONENTS -----
-import DetalhesPergunta from '../detalhes-pergunta';
 
 
 // Antd and Bootstrap
