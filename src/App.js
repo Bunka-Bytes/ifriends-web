@@ -2,7 +2,7 @@ import React from 'react';
 // ------- STYLES -----
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'antd/dist/antd.css';
-import './main.css';
+import './styles/main.css';
 
 
 // ------- COMPONENTS -----
@@ -17,7 +17,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import MenuSup from './components/menus/menu-sup';
 import MenuSide from './components/menus/menu-side';
 import Contato from './components/contato'
-import Routing from './routes';
+import Routing  from './routes';
 
 
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 // ------- STYLES -----
 import '../../../styles/menu.css';
 
@@ -7,7 +8,7 @@ import '../../../styles/menu.css';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Stack from 'react-bootstrap/Stack';
-import { Input, Space, Switch, Avatar, Badge, Layout } from 'antd';
+import { Input, Space, Avatar, Badge, Layout } from 'antd';
 
 // ------ ICONS -----
 import { IoIosNotifications } from 'react-icons/io';
@@ -22,15 +23,17 @@ const MenuSup = props => {
 			<Header className="menuSupBox">
 				<Container>
 					<Stack direction="horizontal" gap={3}>
-						<Navbar.Brand href="/">
-							<img
-								src="/logo.png"
-								width="85"
-								height="60"
-								className="d-inline-block align-top"
-								alt="IFriends logo"
-							/>
-						</Navbar.Brand>
+						<Link to="/">
+							<Navbar.Brand>
+								<img
+									src="/logo.png"
+									width="85"
+									height="60"
+									className="d-inline-block align-top"
+									alt="IFriends logo"
+								/>
+							</Navbar.Brand>
+						</Link>
 
 						<>
 							<Search
@@ -70,11 +73,6 @@ const MenuSup = props => {
 									'xxs'
 								]}
 								icon={<AiOutlineUser />}
-								className="icons"
-							/>
-							<Switch
-								checkedChildren="EN"
-								unCheckedChildren="POR"
 								className="icons"
 							/>
 						</Space>

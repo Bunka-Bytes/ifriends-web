@@ -6,7 +6,7 @@ export const getURI = (uri, params) => {
   return aux;
 };
 
-const API = process.env.REACT_APP_API_URL || "/api";
+const API = "/api";
 
 export const USUARIOS = `${API}/usuarios`;
 export const PERGUNTAS = `${API}/perguntas`;

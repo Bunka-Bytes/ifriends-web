@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { getToken } from './auth';
 
 export function ROOT_URL() {
-  return process.env.REACT_APP_API_URL;
+	return process.env.REACT_APP_API_URL;
 }
 
 export function postResource(resource, body, config, newInstance) {

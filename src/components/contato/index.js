@@ -1,4 +1,5 @@
 import React from 'react';
+// import { Link } from 'react-router-dom';
 import { Layout, Divider, Row, Col, Anchor, Typography, Space } from 'antd';
 import Image from 'react-bootstrap/Image';
 import Container from 'react-bootstrap/Container';
@@ -21,6 +22,7 @@ const Contato = () => {
 					<Row justify="space-around" align="middle">
 						<Col>
 							<Image width={250} fluid src="/logo.png" />
+							{/* incluir aqui o botão de internacionalização */}
 						</Col>
 						<Col>
 							<Anchor affix={false}>
@@ -38,7 +40,7 @@ const Contato = () => {
 								<Title level={5} style={{ marginLeft: '0.5rem' }}>
 									Mapa da aplicação
 								</Title>
-								<Link href="/home" title="Página Inicial" />
+								<Link to="/home" title="Página Inicial" />
 								<Link href="/home" title="Eventos" />
 								<Link href="/home" title="Categorias" />
 								<Link href="/home" title="Configurações" />

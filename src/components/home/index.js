@@ -62,13 +62,22 @@ const Home = props => {
 
 	useEffect(() => {
 		console.log('GETzin')
-		getPerguntas('?').then(request => {
+		getPerguntas('/buscar?').then(request => {
 			let lista = request.data.map(pergunta => ({
-				key: pergunta.id, id: pergunta.id, titulo: pergunta.titulo, descricao: pergunta.texto, imgPerfil: pergunta.usuario.imagem, data: `${Math.ceil(Math.random() * 12)} dias atrás`, curtidas: Math.ceil(Math.random() * 100), comentarios: Math.ceil(Math.random() * 50), visualizacoes: Math.ceil(Math.random() * 1000), nomeCategoria: pergunta.categoria.nome
+				key: pergunta.id,
+				id: pergunta.id,
+				titulo: pergunta.titulo,
+				descricao: pergunta.texto,
+				imgPerfil: pergunta.usuario.imagem,
+				data: `${Math.ceil(Math.random() * 12)} dias atrás`,
+				curtidas: Math.ceil(Math.random() * 100),
+				comentarios: Math.ceil(Math.random() * 50),
+				visualizacoes: Math.ceil(Math.random() * 1000),
+				nomeCategoria: pergunta.categoria.nome
 			}));
 
-			setListData(lista)
-		})
+			setListData(lista);
+		});
 	}, []);
 
 	const menu = (
@@ -188,7 +197,7 @@ const Home = props => {
 													</Row>
 												</Fragment>
 											}
-											onClick={() => alert('Cliquei')}
+											onClick={() => navigate(`/pergunta/${item.key}`)}
 											hoverable
 											// extra={}
 										>
@@ -234,7 +243,6 @@ const Home = props => {
 																				background: 'var(--green)',
 																				borderColor: 'var(--green-medium)'
 																			}}
-
 																		>
 																			&nbsp;&nbsp; Responder
 																		</Button>
