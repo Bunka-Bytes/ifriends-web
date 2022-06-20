@@ -64,7 +64,7 @@ const UploadImage = (props) => {
 
   const uploadImage = () => {
     const key = process.env.REACT_APP_API_IMGBB_KEY;
-    return process.env.REACT_APP_API_IMGBB_URL + `/1/upload?key=${key}`;
+    return process.env.REACT_APP_API_IMGBB_URL + `1/upload?key=${key}`;
   };
 
   return (
