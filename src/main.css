@@ -1,0 +1,62 @@
+:root{
+
+    /* ------- COLORS ------- */
+    /* Brand */
+    --blue-dark: rgba(24, 32, 68, 1);
+    --blue-medium: rgba(61, 63, 96, 1);
+    --blue-light: rgba(81, 98, 142, 1);
+    --aqua-dark: rgba(132, 194, 194, 1);
+    --aqua-medium: rgba(153, 204, 204, 1);
+    --aqua-light: rgba(174, 214, 214, 1);
+    --purple: rgba(103, 68, 227, 1);
+    --purple-medium: rgba(136, 99, 233, 1);
+    --purple-light: rgba(163, 129, 238, 1);
+
+    /* System */
+    --red: rgba(215, 55, 84, 1);
+    --red-medium: rgba(231, 63, 93, 1);
+    --red-light: rgb(255, 138, 116);
+    --green: rgba(70, 139, 59, 1);
+    --green-medium: rgba(102, 158, 90, 1);
+    --green-light: rgba(133, 177, 122, 1);
+
+    /* Neutral */
+    --black: rgba(41, 41, 46, 1);
+    --white: rgba(255, 255, 255, 1);
+    --gray-dark: rgba(255, 255, 255, 1);
+    --gray-medium: rgba(128, 128, 128, 1);
+    --gray-light: rgba(234, 234, 234, 1);
+    --background: rgba(250, 250, 250, 1);
+
+    /* ------- COLORS ------- */
+    --title-font: "Poppins", sans-serif;
+    --body-font: "Quicksand", sans-serif;
+}
+
+body{
+    font-family: var(--body-font);
+    background-color: var(--background);
+}
+
+h1, h2, h3{
+    font-family: var(--title-font)!important;
+}
+
+h5, a{
+    color: var(--black);
+}
+
+.icons{
+    color: var(--white);
+	background-color: var(--blue-dark);
+}
+
+.card-box{
+    border-radius: 0.25rem !important;
+}
+
+.ant-btn-primary{
+    color: var(white);
+	background-color: var(--blue-dark);
+    border-color: var(--blue-dark);
+}

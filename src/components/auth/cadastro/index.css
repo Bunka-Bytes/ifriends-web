@@ -1,0 +1,29 @@
+.banner {
+  background-color: #455A64;
+  border-radius: 15px 5px 5px 15px;
+}
+
+.col {
+  padding: 1.25rem;
+}
+
+@media (min-width: 993px) {
+  .content {
+    background-color: #F8F8F8;
+    border-radius: 5px;
+  }
+}
+
+@media (max-width: 992px) {
+  .banner {
+    display: none;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+
+  .content{
+    background-color: #F8F8F8;
+    border-radius: 0px,
+  }
+}
