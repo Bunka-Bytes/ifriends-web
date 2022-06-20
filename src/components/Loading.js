@@ -1,11 +1,9 @@
-import { Spinner } from "react-bootstrap";
+import { Spin } from 'antd';
 
 function Loading() {
-  return (
-    <Spinner animation="border" role="status">
-      <span className="visually-hidden">Loading...</span>
-    </Spinner>
-  );
+	return (
+		<Spin size="large" style={{ position: 'fixed', top: '50%', left: '50%' }} />
+	);
 }
 
 export default Loading;

@@ -184,7 +184,7 @@ const MenuSup = (props) => {
 							allowClear
 							onSearch={(e, f) => {
 								navigate(`/`);
-								selecionarBusca({ titulo: e });
+								selecionarBusca({ pesquisa: e });
 							}}
 							enterButton
 							size="large"

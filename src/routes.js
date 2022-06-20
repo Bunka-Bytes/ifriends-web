@@ -9,6 +9,7 @@ import Login from './components/auth/login';
 import Cadastro from './components/auth/cadastro';
 
 import NotFound from './components/common/status/not-found';
+import Working from './components/common/working';
 import { isAuthenticated } from './services/auth';
 
 const PrivateRoutes = () => {
@@ -29,10 +30,10 @@ export default function Routing() {
 	return (
 		<Routes>
 			<Route exact path="/" element={<Home />} />
-			<Route exact path="/eventos" element={<h1>Eventos </h1>} />
-			<Route exact path="/categorias" element={<h1>Categorias</h1>} />
-			<Route exact path="/ajuda" element={<h1>Ajuda</h1>} />
-			<Route exact path="/config" element={<h1>Config</h1>} />
+			<Route exact path="/eventos" element={<Working />} />
+			<Route exact path="/categorias" element={<Working />} />
+			<Route exact path="/ajuda" element={<Working />} />
+			<Route exact path="/config" element={<Working />} />
 			<Route path="/pergunta/:id" element={<DetalhesPergunta />} />
 
 			<Route element={<FormsRedirect />}>
