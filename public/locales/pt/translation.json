@@ -21,7 +21,9 @@
   "label-mark": "Marcar como melhor resposta",
   "label-now": "há pouco tempo",
 
-
+  "working-comming-soon": "Em Breve",
+  "working-comming-soon-label": "Desculpe, esta página ainda está em desenvolvimento",
+  "working-comming-soon-home": "Ir para a página inicial",
 
   "btn-perguntar":"Perguntar",
   "btn-responder":"Responder",

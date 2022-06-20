@@ -21,6 +21,10 @@
   "label-mark": "Mark as best reply",
   "label-now": "a few time ago",
 
+  "working-comming-soon": "Comming soon",
+  "working-comming-soon-label": "We're still working on that page",
+  "working-comming-soon-home": "Go home instead",
+
 
   "btn-perguntar":"Ask Question",
   "btn-responder":"Reply",
