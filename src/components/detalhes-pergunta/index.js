@@ -10,12 +10,12 @@ import { useParams } from 'react-router-dom';
 import Pergunta from './pergunta';
 import Resposta from './resposta';
 
-const DetalhesPergunta = () => {
+const DetalhesPergunta = (props) => {
 	const { id } = useParams();
 	return (
 		<>
-			<Pergunta idPergunta={id} />
-			<Resposta idPergunta={id} />
+			<Pergunta idPergunta={id} {...props} />
+			<Resposta idPergunta={id} {...props} />
 		</>
 	);
 };

@@ -1,55 +1,39 @@
-.menuSupBox{
-    background-color: var(--white);
-    overflow: hidden;
-}
-
-
-.layout-sider{
-    overflow: hidden;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-}
-
-
-.ant-layout-sider-children .ant-menu.ant-menu-inline-collapsed,
-.ant-layout-sider{
-    width: 4rem !important;
-}
-
-aside{
+/* aside{
     width: 4rem !important;
     min-width: 4rem !important; 
     flex: 0 0 4rem !important; 
     max-width: 4rem !important;
     z-index: 10;
-}
-
-.ant-layout-sider-dark{
-    flex: 0 0 0 !important;
-    min-width: none !important;
-}
-
-.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left{
-    border: 0;
-}
-
-.ant-layout-sider-trigger{
-    background: none;
-}
-
-.ant-menu-light .ant-menu-item:hover, .ant-menu-light .ant-menu-item-active, .ant-menu-light .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-light .ant-menu-submenu-active, .ant-menu-light .ant-menu-submenu-title:hover, .ant-menu-item-selected {
-    color: var(--purple-medium);
-}
+} */
 
 .layout-background{
     background-color: var(--blue-dark);
     color: var(--white);
-
     flex: 0 0 0 !important;
     min-width: none !important;
     max-width: none !important;
 }
 
+.layout-sider{
+    overflow: hidden;
+    height: 100vh;
+    position: sticky;
+    left: 0;
+    top: 0;
+}
+
+.layout-menu{
+    height: 100%;
+    display: grid;
+    align-content: space-around;
+    align-items: middle;
+}
+
+.menuSupBox{
+    background-color: var(--white);
+    overflow: hidden;
+}
+
+.icon-menu{
+    font-size:1.5rem;
+}

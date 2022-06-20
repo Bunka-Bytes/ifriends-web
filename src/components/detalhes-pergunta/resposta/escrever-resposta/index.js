@@ -1,198 +1,291 @@
-import React, { Fragment, createElement } from 'react';
-import { Comment, Avatar, Form, Button, List, Input, Row, Col, Space, Tooltip } from 'antd';
-import moment from 'moment';
-import { AiOutlineUser } from 'react-icons/ai';
-import { IoSend } from 'react-icons/io5';
-import { IoIosUndo } from 'react-icons/io';
-import { LikeOutlined, LikeFilled } from '@ant-design/icons';
+import React, { Fragment, useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import {
+	Comment,
+	Avatar,
+	Form,
+	Button,
+	List,
+	Input,
+	Row,
+	Col,
+	Space,
+	Tooltip,
+	Typography,
+	message,
+	Card,
+	Dropdown,
+	Menu
+} from 'antd';
+import moment from "moment";
+import { AiOutlineCheckCircle, AiOutlineEdit } from 'react-icons/ai';
+import { IoSend } from "react-icons/io5";
+import { IoIosUndo } from "react-icons/io";
+import { LikeOutlined, LikeFilled, UserOutlined } from '@ant-design/icons';
+import { FiMoreVertical, FiTrash2 } from 'react-icons/fi';
+import { RiQuestionAnswerLine } from 'react-icons/ri';
+
+// ------ SERVICES -----
+import { getRespostas, postResposta } from "../../../../services/resposta";
+import { isAuthenticated } from '../../../../services/auth';
+import { postCurtidaResposta } from '../../../../services/curtidas-resposta';
 
 
+// ------ FUNCTIONS ------
+import { dateDifferenceInDays } from "../../../../utils/functions";
+
+import CardCadastro from '../../../common/card-cadastro';
 const { TextArea } = Input;
 
-let likes = 0;
-let action = null;
+const CommentList = ({ comments }) => {
+	const { t } = useTranslation();
 
-const data = [
-	{
-		author: 'Han Solo',
-		avatar: 'https://joeschmoe.io/api/v1/random',
-		content: (
-			<p>
-				We supply a series of design principles, practical patterns and high
-				quality design resources (Sketch and Axure), to help people create their
-				product prototypes beautifully and efficiently.
-			</p>
-		),
-		datetime: (
-			<Tooltip
-				title={moment().subtract(2, 'days').format('YYYY-MM-DD HH:mm:ss')}
-			>
-				<span>{moment().subtract(2, 'days').fromNow()}</span>
-			</Tooltip>
-		),
-		actions: [
-			<Tooltip key="comment-basic-like" title="Like">
-				<Row>
-					<Space>
-						<span
-							onClick={(likes, action) => {
-                                alert("Clicou");
-                                likes = 1;
-								action = 'liked';
-							}}
-							className="d-flex align-items-center"
-						>
-							{createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-							<span className="comment-action">{likes}</span>
-						</span>
-					</Space>
-				</Row>
-			</Tooltip>
-		]
-	}
-];
-
-const CommentList = ({ comments }) => (
-   
-	<List
-		dataSource={comments}
-		header={`${comments.length} ${comments.length > 1 ? 'respostas' : 'resposta'}`}
-		itemLayout="horizontal"
-		renderItem={props => <Comment {...props} />}
-	/>
-);
-
-const Editor = ({ onChange, onSubmit, submitting, value }) => (
-	<Fragment>
-		<Form.Item>
-			<TextArea rows={4} onChange={onChange} value={value} />
-		</Form.Item>
-		<Form.Item>
-			<Button
-				htmlType="submit"
-				loading={submitting}
-				onClick={onSubmit}
-				type="primary"
-				style={{
-					background: 'var(--green)',
-					borderColor: 'var(--green-medium)'
-				}}
-			>
-				<Space>
-					<IoSend />
-					Comentar
-				</Space>
-			</Button>
-		</Form.Item>
-	</Fragment>
-);
-
-class Comentario extends React.Component {
-	state = {
-		comments: [...data],
-		submitting: false,
-		value: '',
-		likes: 0,
-		action: null
-	};
-
-	like = () => {
-		this.setState({
-			likes: 1,
-			action: 'liked'
-		});
-	};
-
-	handleSubmit = () => {
-		if (!this.state.value) {
-			return;
-		}
-
-		this.setState({
-			submitting: true
-		});
-
-		setTimeout(() => {
-			this.setState({
-				submitting: false,
-				value: '',
-				comments: [
-					...this.state.comments,
+	const menu = (id) => {
+		return (
+			<Menu
+				align="start"
+				items={[
 					{
-						author: 'Fulano',
+						key: '1',
+						label: t('label-remove-view'),
+						icon: <FiTrash2 />
+					},
+
+					{
+						key: '2',
+						label: t('label-edit'),
+						icon: <AiOutlineEdit />
+					}
+				]}
+			/>
+		)
+	};
+
+	return (
+		<List
+			dataSource={comments}
+			header={
+				<Typography.Title level={5} style={{ marginLeft: '0.5rem' }}>
+					{comments.length + ' '}
+					{comments.length > 1 ? t('label-answers') : t('label-answer')}
+				</Typography.Title>
+			}
+			itemLayout="horizontal"
+			renderItem={props => {
+				console.log(props.key);
+
+				return (
+					<Card style={{ marginBottom: '0.75rem' }}>
+						{isAuthenticated() &&
+							sessionStorage.getItem('@user-name') === props.author ? (
+							<Row justify="end" align="middle">
+								<Col>
+									<Dropdown overlay={menu} placement="bottomRight" arrow>
+										<a onClick={e => e.preventDefault()}>
+											<FiMoreVertical />
+										</a>
+									</Dropdown>
+								</Col>
+							</Row>
+						) : (
+							<></>
+						)}
+
+						<Comment {...props} />
+					</Card>
+				)
+			}}
+		/>
+	);
+}
+
+
+
+const Editor = ({ onChange, onSubmit, submitting, value }) => {
+	const { t } = useTranslation();
+	
+	return (
+		<>
+			<CardCadastro
+				titulo={t('label-your-answer')}
+				descricao={t('label-your-answer-small')}
+				children={
+					<>
+						<Form.Item>
+							<TextArea
+								placeholder={t('criar-pergunta-placeholder-write')}
+								bordered={false}
+								allowClear={true}
+								showCount
+								maxLength={25000}
+								name={'texto'}
+								autoSize={{ minRows: 5, maxRows: 25 }}
+								onChange={onChange}
+								value={value}
+							/>
+						</Form.Item>
+
+						<Form.Item style={{ marginTop: '3rem' }}>
+							<Row justify="end">
+								<Button
+									htmlType="submit"
+									loading={submitting}
+									onClick={onSubmit}
+									icon={
+										<IoIosUndo color="white" style={{ marginRight: '0.25rem' }} />
+									}
+									type="primary"
+									style={{
+										background: 'var(--green)',
+										borderColor: 'var(--green-medium)'
+									}}
+								>
+									{t('btn-responder')}
+								</Button>
+							</Row>
+						</Form.Item>
+					</>
+				}
+			/>
+		</>
+	)
+}
+
+const Comentario = (props) => {
+	const [comments, setComments] = useState([]);
+	const [submitting, setSubmitting] = useState(false);
+	const [value, setValue] = useState('');
+	const { t } = useTranslation();
+	
+  	const { idPergunta } = props;
+
+  	const exibirdata = (resposta) => {
+    const { dataEmissao } = resposta;
+    const newDataEmissao = new Date(
+      `${dataEmissao[0]}-${dataEmissao[1]}-${dataEmissao[2]}`
+    );
+    const dateToday = new Date();
+
+    const differDatesInDays = dateDifferenceInDays(
+      newDataEmissao,
+      dateToday
+    );
+
+    return differDatesInDays;
+	}
+	
+	
+  useEffect(() => {
+    getRespostas(idPergunta)
+			.then(request => {
+				console.log('dadosResposta', request.data);
+
+				let comments = request.data.map(resposta => {
+					return {
+						key:  resposta.id,
+						content: resposta.texto,
+						author: resposta.usuario.nome,
 						avatar: (
 							<Avatar
-								breakpoints={[
-									'xxxl',
-									'xxl',
-									'xl',
-									'lg',
-									'md',
-									'sm',
-									'xs',
-									'xxs'
-								]}
-								icon={<AiOutlineUser />}
+								src={resposta.usuario.imagem || null}
 								className="icons"
+								icon={<UserOutlined size={30} /> || null}
+								size={30}
 							/>
 						),
-						content: <p>{this.state.value}</p>,
-						actions: [
-						<Tooltip key="comment-basic-like" title="Like">
-								<Row>
-									<span
-										onClick={this.like}
-										className="d-flex align-items-center"
-									>
-										{createElement(
-											this.state.action === 'liked' ? LikeFilled : LikeOutlined
-										)}
-										<span className="comment-action">{this.state.likes}</span>
-									</span>
-								</Row>
-						</Tooltip>
-						],
-						datetime: moment().fromNow(),
-
-					}
-				]
+						datetime:
+							exibirdata(resposta) === 0
+								? t('label-now')
+								: `${exibirdata(resposta)} ${t('label-days-ago')}`,
+					};
+					
+				});
+				setComments(comments);
+			})
+			.catch(error => {
+				console.log(error);
+				return message.error(
+					error.response.data + ' - ' + error.code + ' ' + error.response.status
+				);
 			});
-		}, 1000);
+  }, []);
+	
+	
+	const handleSubmit = () => {
+		if (isAuthenticated() && value) {
+			setSubmitting(true);
+			setTimeout(() => {
+				setSubmitting(false);
+				setValue('');
+				let resposta = {
+					texto: value,
+					pergunta: idPergunta
+				};
+				postResposta(resposta)
+					.then(request => {
+						message.success(t('label-answers-thks'));
+						console.log('dadosResposta', request.data);
+
+						setComments([
+							...comments,
+							{
+								key: request.data.id,
+								author: request.data.usuario.nome,
+								avatar: (
+									<Avatar
+										src={request.data.usuario.imagem || null}
+										className="icons"
+										icon={<UserOutlined size={30} /> || null}
+										size={30}
+									/>
+								),
+								autorEmail: request.data.usuario.email,
+								content: <span>{request.data.texto}</span>,
+								datetime:
+									exibirdata(request.data) === 0
+										? t('label-now')
+										: `${exibirdata(request.data)} ${t('label-days-ago')}`
+							}
+						]);
+					})
+					.catch(error => {
+						console.log(error);
+						return message.error(
+							error.response.data +
+								' - ' +
+								error.code +
+								' ' +
+								error.response.status
+						);
+					});
+			}, 1000);
+		}
+		if (!value) return;
+		if(!isAuthenticated()){message.info(t('label-authenticate'));} 
+		
 	};
 
-	handleChange = e => {
-		this.setState({
-			value: e.target.value
-		});
+	const handleChange = e => {
+		setValue(e.target.value);
 	};
 
-	render() {
-		const { comments, submitting, value } = this.state;
-
-		return (
-			<>
-				{comments.length > 0 && <CommentList comments={comments} />}
-
-				<Comment
-					avatar={
-						<Avatar
-							breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
-							icon={<AiOutlineUser />}
-							className="icons"
-						/>
-					}
-					content={
-						<Editor
-							onChange={this.handleChange}
-							onSubmit={this.handleSubmit}
-							submitting={submitting}
-							value={value}
-						/>
-					}
-				/>
-			</>
-		);
-	}
-}
+	return (
+		<>
+			{comments.length > 0 && <CommentList comments={comments} id={idPergunta} />}
+			<Comment
+				content={
+					<Editor
+						onChange={handleChange}
+						onSubmit={handleSubmit}
+						submitting={submitting}
+						value={value}
+					/>
+				}
+			/>
+			
+		</>
+	);
+};
 
 export default Comentario;

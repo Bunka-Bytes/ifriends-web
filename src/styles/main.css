@@ -54,9 +54,3 @@ h5, a{
 .card-box{
     border-radius: 0.25rem !important;
 }
-
-.ant-btn-primary{
-    color: var(white);
-	background-color: var(--blue-dark);
-    border-color: var(--blue-dark);
-}

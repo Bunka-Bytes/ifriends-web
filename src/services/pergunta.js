@@ -2,7 +2,8 @@ import {
   getResource,
   postResource,
   putResource,
-  deleteResource
+  deleteResource,
+  serializeObjectToParam
 } from './utils';
 import { PERGUNTAS } from '../utils/uri-api';
 
@@ -10,7 +11,7 @@ export const getPergunta = (codPergunta) =>
   getResource(`${PERGUNTAS}/${encodeURIComponent(codPergunta)}`);
 
 export const getPerguntas = (filtro) =>
-  getResource(`${PERGUNTAS}${filtro}`);
+  getResource(`${PERGUNTAS}${serializeObjectToParam(filtro, true)}`);
 
 export const postPergunta = (pergunta) => postResource(`${PERGUNTAS}`, pergunta);
 

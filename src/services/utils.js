@@ -1,42 +1,41 @@
 import axios from 'axios';
 import { getToken } from './auth';
 
-export function ROOT_URL() {
-	return process.env.REACT_APP_API_URL;
+export const api = axios.create({
+	baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080'
+});
+
+api.interceptors.request.use(async config => {
+	const token = getToken();
+	if (token) {
+		config.headers.Authorization = `Bearer ${token}`;
+	}
+	return config;
+});
+
+export function postResource(resource, body, config) {
+	return api.post(resource, body, config).then(response => {
+		return response;
+	});
 }
 
-export function postResource(resource, body, config, newInstance) {
-  return getAxiosInstance(newInstance).post(ROOT_URL() + resource, body, config).then(response => {
-    return response;
-  });
+export function putResource(resource, body, config) {
+	return api.put(resource, body, config).then(response => {
+		return response;
+	});
 }
 
-export function putResource(resource, body, config, newInstance) {
-  return getAxiosInstance(newInstance).put(ROOT_URL() + resource, body, config).then(response => {
-    return response;
-  });
+export function getResource(resource, config) {
+	return api.get(resource, config).then(response => {
+		return response;
+	});
 }
 
-export function getResource(resource, config, newInstance) {
-  return getAxiosInstance(newInstance).get(ROOT_URL() + resource, config).then(response => {
-    return response;
-  });
+export function deleteResource(resource, config) {
+	return api.delete(resource, config).then(response => {
+		return response;
+	});
 }
-
-export function deleteResource(resource, config, newInstance) {
-  return getAxiosInstance(newInstance).delete(ROOT_URL() + resource, config).then(response => {
-    return response;
-  });
-}
-
-function getAxiosInstance(newInstance) {
-  let axiosInstance = axios;
-  if (newInstance) {
-    axiosInstance = axios.create();
-  }
-  return axiosInstance;
-}
-
 
 export function serializeObjectToParam(filtro, first) {
   var str = first ? "?" : "";

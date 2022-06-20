@@ -8,39 +8,45 @@ import Image from 'react-bootstrap/Image';
 import { Card, Typography, Col, Row, Space, Button } from 'antd';
 import { Link } from 'react-router-dom';
 
+import './index.css';
+
 // ------ ICONS -----
 import {
 	IoCalendarClearOutline,
 	IoCreateOutline,
 	IoFilter
 } from 'react-icons/io5';
-
+import { useTranslation } from 'react-i18next';
 
 const Banner = props => {
 	const navigate = useNavigate();
+	const { t } = useTranslation();
+
 	return (
 		<>
-			<Card style={{}}>
+			<Card>
 				<Container>
 					<Row
 						justify="space-between"
 						align="middle"
-						gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}
 						style={{ textAlign: 'center' }}
 					>
-						<Col>
-							<Image width={180} fluid src="/imgs/banner/Curtida.png" />{' '}
+						<Col xs={12} sm={5} lg={6}>
+							<Image
+								className="banner-img"
+								width={180}
+								fluid
+								src="/imgs/banner/Curtida.png"
+							/>
 						</Col>
-						<Col span={14}>
+						<Col xs={24} sm={24} md={24} lg={12}>
 							<Stack>
 								<Typography>
 									<Typography.Title level={2}>
-										Está com dúvidas ou quer compartilhar o que sabe? Navegue
-										pelo IFriends!
+										{t('home-banner-title')}
 									</Typography.Title>
 									<Typography.Paragraph>
-										Aqui você pode ser perguntar, responder e ainda participar
-										ou dar mentorias <br /> sobre um assunto que ache legal!
+										<small>{t('home-banner-descricao')}</small>
 									</Typography.Paragraph>
 									<Space>
 										<Button
@@ -52,7 +58,7 @@ const Banner = props => {
 											onClick={() => navigate('/criar-pergunta')}
 											className="layout-background"
 										>
-											Perguntar
+											{t('btn-perguntar')}
 										</Button>
 
 										<Button
@@ -62,14 +68,19 @@ const Banner = props => {
 											onClick={() => navigate('/eventos')}
 											className="layout-background"
 										>
-											Ver eventos
+											{t('btn-ver-eventos')}
 										</Button>
 									</Space>
 								</Typography>
 							</Stack>
 						</Col>
-						<Col>
-							<Image width={125} fluid src="/imgs/banner/Duvida.png" />{' '}
+						<Col xs={12} sm={5} lg={6}>
+							<Image
+								className="banner-img"
+								width={125}
+								fluid
+								src="/imgs/banner/Duvida.png"
+							/>
 						</Col>
 					</Row>
 				</Container>
@@ -81,7 +92,7 @@ const Banner = props => {
 						style={{ color: 'var(--white)', background: 'var(--purple)' }}
 						disabled
 					>
-						Filtros
+						{t('btn-filtros')}
 					</Button>
 				</Container>
 			</Card>

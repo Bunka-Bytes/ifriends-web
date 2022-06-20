@@ -1,139 +1,96 @@
-import React, { useEffect, useState, Fragment } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState, Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 // ------- STYLES -----
-import 'antd/dist/antd.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './styles.css'
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./styles.css";
 
 // ------- COMPONENTS -----
 
-
 // Antd and Bootstrap
-import { Grid } from 'react-flexbox-grid'
-import { Col, Row } from 'react-bootstrap';
-import {
-	Tooltip,
-	Skeleton,
-	Switch,
-	Card,
-	Avatar,
-	Divider,
-	Tag,
-	Button,
-	Typography,
-	Menu,
-	Dropdown,
-	Space,
-	List,
-	Empty
-} from 'antd';
+import { Grid } from "react-flexbox-grid";
+import { Typography, List, Empty, BackTop, message } from "antd";
+import Button from "../common/button";
+import CardPergunta from "./cardPergunta";
 
 // Created
-import Banner from './banner';
-
+import Banner from "./banner";
 
 // ------ ICONS -----
-import {
-	EditOutlined,
-	EllipsisOutlined,
-	SettingOutlined,
-	MessageOutlined,
-	LikeOutlined,
-	StarOutlined
-} from '@ant-design/icons';
-import { FaRegThumbsUp, FaRegComment, FaRegEye } from 'react-icons/fa'
-import { IoIosUndo } from 'react-icons/io'
-import { FiMoreVertical, FiTrash2 } from 'react-icons/fi'
-import { GoMegaphone } from 'react-icons/go'
-import { UserOutlined } from '@ant-design/icons';
+import { IoIosUndo } from "react-icons/io";
 
 // Services
-import { getPerguntas } from '../../services/perguntas';
+import { getPerguntas } from "../../services/pergunta";
+import { connect } from "react-redux";
+import { selecionarBusca } from "../../redux/modules/filtro";
 
-// Destructuring
-const { Meta } = Card;
-const { Title, Paragraph, Text, Link } = Typography;
+// ------ FUNCTIONS ------
+import { dateDifferenceInDays } from "../../utils/functions";
+import { useTranslation } from "react-i18next";
 
+const Home = (props) => {
+  const [listData, setListData] = useState([]);
+  const navigate = useNavigate();
+  const { Title } = Typography;
+  const { filtro, selecionarBusca } = props;
+  const { t } = useTranslation();
 
-const Home = props => {
+  useEffect(() => {
+    return () => selecionarBusca({});
+  }, []);
 
-	const [listData, setListData] = useState([])
-	const navigate = useNavigate();
+  useEffect(() => {
+    getPerguntas(filtro)
+			.then(request => {
+				console.log('dados:', request.data);
 
-	useEffect(() => {
-		console.log('GETzin')
-		getPerguntas('/buscar?').then(request => {
-			let lista = request.data.map(pergunta => ({
-				key: pergunta.id,
-				id: pergunta.id,
-				titulo: pergunta.titulo,
-				descricao: pergunta.texto,
-				imgPerfil: pergunta.usuario.imagem,
-				data: `${Math.ceil(Math.random() * 12)} dias atrás`,
-				curtidas: Math.ceil(Math.random() * 100),
-				comentarios: Math.ceil(Math.random() * 50),
-				visualizacoes: Math.ceil(Math.random() * 1000),
-				nomeCategoria: pergunta.categoria.nome
-			}));
+				let lista = request.data.map(pergunta => {
+					const { dataEmissao } = pergunta;
+					const newDataEmissao = new Date(
+						`${dataEmissao[0]}-${dataEmissao[1]}-${dataEmissao[2]}`
+					);
+					const dateToday = new Date();
 
-			setListData(lista);
-		});
-	}, []);
+					const differDatesInDays = dateDifferenceInDays(
+						newDataEmissao,
+						dateToday
+					);
 
-	const menu = (
-		<Menu
-			items={[
-				{
-					label: (
-						<a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-							Deletar
-						</a>
-					),
-					icon: <FiTrash2 />
-				},
+					return {
+						key: pergunta.id,
+						id: pergunta.id,
+						titulo: pergunta.titulo,
+						descricao: pergunta.texto,
+						autor: pergunta.usuario.nome,
+						imgPerfil: pergunta.usuario.imagem,
+						data:
+							differDatesInDays === 0
+								? t('label-now')
+								: `${differDatesInDays} ${t('label-days-ago')}`,
+						curtidas: pergunta.qtdCurtida,
+						comentarios: pergunta.qtdResposta,
+						visualizacoes: Math.ceil(Math.random() * 1000),
+						nomeCategoria: pergunta.categoria.nome,
+						tags: pergunta.tags
+					};
+				});
+				setListData(lista);
+			})
+			.catch(error => {
+				console.log(error);
+				return message.error(
+					error.response.data + ' - ' + error.code + ' ' + error.response.status
+				);
+			});
+  }, [filtro]);
 
-				{
-					danger: true,
-					label: 'Reportar',
-					icon: <GoMegaphone />
-				},
-			]}
-		/>
-	);
-
-	// for (let i = 0; i < 23; i++) {
-	// 	listData.push({
-	// 		key: i,
-	// 		id: i,
-	// 		href: '#',
-	// 		titulo: `Pergunta - ${i}`,
-	// 		imgPerfil: 'https://joeschmoe.io/api/v1/random',
-	// 		data:
-	// 			`${Math.ceil(Math.random() * 12)} dias atrás`,
-	// 		descricao:
-	// 			'Então com um probleminha aqui ...',
-	// 		curtidas: Math.ceil(Math.random() * 100),
-	// 		comentarios: Math.ceil(Math.random() * 50),
-	// 		visualizacoes: Math.ceil(Math.random() * 1000)
-	// 	});
-	// }
-
-	const IconText = ({ icon, text }) => (
-		<Space>
-			{React.createElement(icon)}
-			{text}
-		</Space>
-	);
-
-
-	return (
+  return (
 		<Fragment>
 			<Banner />
-
 			<Grid fluid style={{ marginTop: '2rem' }}>
 				{listData.length > 0 ? (
 					<Fragment>
-						<Title level={3}>Últimas Perguntas:</Title>
+						<BackTop />
+						<Title level={3}>{t('home-perguntas-title')}</Title>
 
 						<List
 							itemLayout="vertical"
@@ -145,149 +102,39 @@ const Home = props => {
 								pageSize: 8
 							}}
 							dataSource={listData}
-							// footer={
-							//   <div>
-							//     <b>antd</b> footerzinho
-							//   </div>
-							// }
 							renderItem={item => (
 								<List.Item>
-									<Skeleton loading={false} avatar active>
-										<Card
-											className="card-box"
-											title={
-												<Fragment>
-													<Row>
-														<Col
-															xs={12}
-															sm={12}
-															style={{ marginBottom: '0.75rem' }}
-														>
-															<Tag color={'var(--purple)'}>
-																{item.nomeCategoria}
-															</Tag>
-														</Col>
-													</Row>
-													<Row>
-														<Col xs={2} sm={2} md={1}>
-															<Avatar
-																src={item.imgPerfil || null}
-																icon={<UserOutlined />}
-																size="large"
-															/>
-														</Col>
-														<Col xs={8} sm={8} md={10}>
-															<Col xs={12} sm={12}>
-																{item.titulo}
-															</Col>
-															<Col xs={12} sm={12}>
-																<Meta
-																	description={<small>{item.data}</small>}
-																/>
-															</Col>
-														</Col>
-														<Col xs={2} sm={2} md={1}>
-															<GoMegaphone color={'var(--red-medium)'} />
-															{/* <Dropdown overlay={menu}>
-															<a onClick={e => e.preventDefault()}>
-															<FiMoreVertical />
-															</a>
-														</Dropdown> */}
-														</Col>
-													</Row>
-												</Fragment>
-											}
-											onClick={() => navigate(`/pergunta/${item.key}`)}
-											hoverable
-											// extra={}
-										>
-											{item.descricao}
-											<Meta
-												description={
-													<Fragment>
-														<br />
-														<Row className="align-items-center justify-content-between gy-3">
-															<Col xs={4} sm={4} md={2} xl={1}>
-																<Tooltip title={'Curtidas'}>
-																	<FaRegThumbsUp /> {item.curtidas}{' '}
-																</Tooltip>
-															</Col>
-															<Col xs={4} sm={4} md={2} xl={1}>
-																<Tooltip title={'Comentários'}>
-																	<FaRegComment /> {item.comentarios}
-																</Tooltip>
-															</Col>
-															<Col xs={4} sm={4} md={2} xl={1}>
-																<Tooltip title={'Visualizações'}>
-																	<FaRegEye /> {item.visualizacoes}{' '}
-																</Tooltip>
-															</Col>
-															<Col
-																xs={12}
-																sm={12}
-																md={6}
-																xl={9}
-																className="d-flex justify-content-center button-right"
-															>
-																<Row>
-																	<Col>
-																		<Button
-																			type="primary"
-																			icon={<IoIosUndo color="white" />}
-																			className="button-right"
-																			onClick={e => {
-																				e.stopPropagation();
-																				navigate(`/pergunta/${item.key}`);
-																			}}
-																			style={{
-																				background: 'var(--green)',
-																				borderColor: 'var(--green-medium)'
-																			}}
-																		>
-																			&nbsp;&nbsp; Responder
-																		</Button>
-																	</Col>
-																</Row>
-															</Col>
-														</Row>
-													</Fragment>
-												}
-											/>
-										</Card>
-									</Skeleton>
-									{/* <List.Item.Meta
-										avatar={<Avatar src={item.avatar} />}
-										title={<a href={item.href}>{item.title}</a>}
-										description={item.description}
-									/>
-									{item.content} */}
+									<CardPergunta item={item} />
 								</List.Item>
 							)}
 						/>
 					</Fragment>
 				) : (
 					<Empty
-						// image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-						// imageStyle={{
-						//   height: 240,
-						// }}
-						// description={
-						//   <span>
-						//     Customize <a href="#API">Description</a>
-						//   </span>
-						// }
 						description={
-							<Title level={5}>Não foram encontradas perguntas</Title>
+							<Title level={5}>{t('home-perguntas-not-found')}</Title>
 						}
 					>
-						<Button type="primary" onClick={() => navigate('/criar-pergunta')}>
-							<IoIosUndo color="white" /> &nbsp;&nbsp; Crie sua pergunta
-						</Button>
+						<Button
+							icon={<IoIosUndo color="white" />}
+							type="primary"
+							onClick={() => navigate('/criar-pergunta')}
+							label={t('home-criar-pergunta')}
+						/>
 					</Empty>
 				)}
 			</Grid>
 		</Fragment>
 	);
-}
+};
 
-export default Home
+const mapStateToProps = (state) => {
+  const { filtro } = state.filtroReducer;
+  return { filtro };
+};
+
+const mapDispatchToProps = {
+  selecionarBusca,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

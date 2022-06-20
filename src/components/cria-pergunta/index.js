@@ -1,173 +1,179 @@
-import React, { useEffect, useState, Fragment } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { Grid } from 'react-flexbox-grid'
-import { Col, Row } from 'react-bootstrap'
+import React, { useEffect, useState, Fragment } from "react";
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from "react-router-dom";
+
+import { Grid } from "react-flexbox-grid";
+import { Col, Row } from "react-bootstrap";
 import {
-	Card,
-	Divider,
-	Button,
-	Typography,
-	Space, Input, Upload, message, Modal, Select
-} from 'antd'
-import { InboxOutlined, PlusOutlined } from '@ant-design/icons';
-import ImgCrop from 'antd-img-crop';
-import { FiChevronDown, FiTag } from 'react-icons/fi'
-import { GoPencil } from 'react-icons/go'
-import { ImNewspaper, ImCheckboxChecked } from 'react-icons/im'
+  Divider,
+  Button,
+  Typography,
+  Space,
+  Input,
+  Upload,
+  message,
+  Modal,
+} from "antd";
+import { InboxOutlined, PlusOutlined } from "@ant-design/icons";
+import ImgCrop from "antd-img-crop";
+import { FiChevronDown, FiTag } from "react-icons/fi";
+import { GoPencil } from "react-icons/go";
+import { ImNewspaper, ImCheckboxChecked } from "react-icons/im";
 
-import 'antd/dist/antd.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import TagGroup from '../common/tag-group';
+import "bootstrap/dist/css/bootstrap.min.css";
+import TagGroup from "../common/tag-group";
 
-import { postPergunta } from '../../services/perguntas';
-import CardCadastro from '../common/card-cadastro';
+import { postPergunta } from "../../services/pergunta";
+import { getCategoriasPergunta } from '../../services/categorias-pergunta';
+import Select from "../common/select";
+import CardCadastro from "../common/card-cadastro";
 
-const CriaPergunta = props => {
-	const { Title, Paragraph, Text, Link } = Typography;
-	const { TextArea } = Input;
-	const { Dragger } = Upload;
-	const { Option } = Select;
+import axios from "axios";
 
-	const [stateUpload, setStateUpload] = useState({
-		previewVisible: false,
-		previewImage: '',
-		previewTitle: '',
-		fileList: []
-	})
+const CriaPergunta = (props) => {
+  const { Title, Paragraph } = Typography;
+  const { TextArea } = Input;
+  const { Dragger } = Upload;
 
-	const [campos, setCampos] = useState({
-		tags: []
-	})
+  const navigate = useNavigate();
+  const { t } = useTranslation();
 
-	const alteraCampoTipo = (valor, campo) => {
-		console.log(campo, valor)
-		setCampos({
-			...campos, [campo]: valor
-		})
-	}
+  const [stateUpload, setStateUpload] = useState({
+    previewVisible: false,
+    previewImage: "",
+    previewTitle: "",
+    fileList: [],
+  });
 
-	const getBase64 = file => {
-		return new Promise((resolve, reject) => {
-			const reader = new FileReader();
-			reader.readAsDataURL(file);
-			reader.onload = () => resolve(reader.result);
-			reader.onerror = error => reject(error);
-		});
-	}
+  const { previewVisible, previewImage, previewTitle, fileList } = stateUpload;
 
-	const handleCancel = () => setStateUpload({ ...stateUpload, previewVisible: false });
+  const [campos, setCampos] = useState({
+    tags: [],
+  });
+  const [listData, setListData] = useState([]);
+  
 
-	const handlePreview = async file => {
-		if (!file.url && !file.preview) {
-			file.preview = await getBase64(file.originFileObj);
-		}
+  const alteraCampoTipo = (valor, campo) => {
+    setCampos({
+      ...campos,
+      [campo]: valor,
+    });
+  };
 
-		setStateUpload({
-			...stateUpload,
-			previewImage: file.url || file.preview,
-			previewVisible: true,
-			previewTitle: file.name || file.url.substring(file.url.lastIndexOf('/') + 1),
-		});
-	};
+  const getBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+  };
 
-	const handleChange = (info) => {
-		const { file } = info
+  const handleCancel = () =>
+    setStateUpload({ ...stateUpload, previewVisible: false });
 
-		if (info.file.status === 'done') {
-			message.success(`${info.file.name} arquivo enviado com sucesso`);
-		} else if (info.file.status === 'error') {
-			message.error(`${info.file.name} arquivo enviado com falha.`);
-		}
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
 
-		const isLt2M = file.size / 1024 / 1024 < 1;
-		// console.log(isLt2M)
-		if (isLt2M) {
-			setStateUpload({ ...stateUpload, fileList: info.fileList })
-		}
-	};
+    setStateUpload({
+      ...stateUpload,
+      previewImage: file.url || file.preview,
+      previewVisible: true,
+      previewTitle:
+        file.name || file.url.substring(file.url.lastIndexOf("/") + 1),
+    });
+  };
 
-	// const draggerUpload = {
-	//   name: 'file',
-	//   multiple: true,
-	//   listType: "picture-card",
-	//   action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-	//   onChange(info) {
-	//     const { status } = info.file;
-	//     if (status !== 'uploading') {
-	//       console.log(info.file, info.fileList);
-	//     }
-	//     if (status === 'done') {
-	//       message.success(`${info.file.name} file uploaded successfully.`);
-	//     } else if (status === 'error') {
-	//       message.error(`${info.file.name} file upload failed.`);
-	//     }
-	//   },
-	//   onDrop(e) {
-	//     console.log('Dropped files', e.dataTransfer.files);
-	//   },
-	// };
+  const handleChange = (info) => {
+    const { file } = info;
+    console.log(info);
+    if (info.file.status === "done") {
+      message.success(`${info.file.name} ${t('log-message-file-sent')}`);
+      alteraCampoTipo(file.response.data.url, "image");
+    } else if (info.file.status === "error") {
+      message.error(`${info.file.name} ${t('log-message-file-sent-error')}`);
+    }
 
+    const isLt2M = file.size / 1024 / 1024 < 1;
+    if (isLt2M) {
+      setStateUpload({ ...stateUpload, fileList: info.fileList });
+    }
+  };
 
-	// ----------------------
-
-	// const onChange = ({ fileList: newFileList }) => {
-	//   setStateUpload({ ...stateUpload, newFileList });
-	// };
-
-	// const onPreview = async file => {
-	//   let src = file.url;
-	//   if (!src) {
-	//     src = await new Promise(resolve => {
-	//       const reader = new FileReader();
-	//       reader.readAsDataURL(file.originFileObj);
-	//       reader.onload = () => resolve(reader.result);
-	//     });
-	//   }
-	//   const image = new Image();
-	//   image.src = src;
-	//   const imgWindow = window.open(src);
-	//   imgWindow.document.write(image.outerHTML);
-	// };
-
-	const { previewVisible, previewImage, previewTitle, fileList } = stateUpload;
-
-	const navigate = useNavigate();
-
-	const uploadButton = (
-		<div>
-			<PlusOutlined />
-			<div style={{ marginTop: 8 }}>Upload</div>
-		</div>
-	);
-
-	const salvar = pergunta => {
-		let perguntaEntity = { ...pergunta, usuario: 2, categoria: 1 }
-		postPergunta(perguntaEntity)
-			.then((request) => {
-				// atualizaData(request.data)
-				// callback && callback();
-				message.success((`Pergunta - ${request.data.titulo} - salva com sucesso.`))
+  const salvar = (pergunta) => {
+    //   criar dados para categorias
+    postPergunta(pergunta)
+			.then(request => {
+				message.success(t('log-message-question-sent'));
 			})
-	}
+			.catch(error => {
+				console.log(error);
+				return message.error(
+					error.response.data + ' - ' + error.code + ' ' + error.response.status
+				);
+			});
+    navigate('/');
+  };
 
-	return (
+  // const optionsCategoria = [{ value: 1, label: "Matemática" }];
+   useEffect(() => {
+			getCategoriasPergunta()
+				.then(request => {
+					let lista = request.data.map(categoria => {
+						return {
+							value: categoria.id,
+							label: categoria.nome
+						};
+					});
+					setListData(lista);
+				})
+				.catch(error => {
+					console.log(error);
+					return message.error(
+						error.response.data +
+							' - ' +
+							error.code +
+							' ' +
+							error.response.status
+					);
+				});
+		}, []);
+
+  const uploadImage = (img) => {
+    // let body = new FormData();
+    // body.set("key", "bb2fd25e124822a816f0c74af334209d");
+
+    // body.append("image", img);
+
+    // axios({
+    //   method: "post",
+    //   url: "https://api.imgbb.com/1/upload",
+    //   data: body,
+    // });
+
+    return `https://api.imgbb.com/1/upload?key=bb2fd25e124822a816f0c74af334209d`;
+  };
+
+  return (
 		<Fragment>
-			<Grid fluid style={{ width: '80%' }}>
+			<Grid fluid>
 				<Title level={3} title>
-					Faça a sua pergunta
+					{t('criar-pergunta-title')}
 				</Title>
-				<Row between="xs" top="xs">
+				<Row between="xs" top="xs" className="g-4">
 					<Col xs={12} sm={12} xl={8}>
 						<Row between="xs" top="xs">
 							<Space direction="vertical" size="middle">
 								<Col xs={12} sm={12}>
 									{CardCadastro({
 										icone: <GoPencil />,
-										titulo: 'Título',
-										descricao: 'Informe um título sucinto que ajude a compreender melhor o problema.',
-										children:
+										titulo: t('criar-pergunta-label-title'),
+										descricao: t('criar-pergunta-label-title-descp'),
+										children: (
 											<Input
-												placeholder={'Escreva aqui'}
+												placeholder={t('criar-pergunta-placeholder-write')}
 												bordered={false}
 												allowClear={true}
 												showCount
@@ -178,17 +184,19 @@ const CriaPergunta = props => {
 												}
 												value={campos.titulo}
 											/>
+										)
 									})}
 								</Col>
 
 								<Col xs={12} sm={12}>
 									<CardCadastro
 										icone={<ImNewspaper />}
-										titulo='Descrição do Problema'
-										descricao='Inclua todas as informações necessárias para alguém conseguir responder sua pergunta.'
+										titulo={t('criar-pergunta-label-problem')}
+										descricao={t('criar-pergunta-label-problem-descp')}
 										children={
+											
 											<TextArea
-												placeholder={'Escreva aqui'}
+												placeholder={t('criar-pergunta-placeholder-write')}
 												bordered={false}
 												allowClear={true}
 												showCount
@@ -199,61 +207,49 @@ const CriaPergunta = props => {
 												onChange={e =>
 													alteraCampoTipo(e.target.value, e.target.name)
 												}
-											/>}
+											/>
+										}
 									/>
 								</Col>
 								<Col xs={12} sm={12}>
 									<ImgCrop
 										rotate
-										modalTitle={'Editar Foto'}
-										modalCancel={'Cancelar'}
-										modalOk={'Confirmar'}
+										modalTitle={t('criar-pergunta-img-edit')}
+										modalCancel={t('criar-pergunta-img-cancel')}
+										modalOk={t('criar-pergunta-img-confirm')}
 										beforeCrop={file => {
-											// console.log('bbb', file)
 											const isLt2M = file.size / 1024 / 1024 < 1;
 											if (!isLt2M) {
-												message.error('A imagem deve ser menor que 1MB');
+												message.error(t('criar-pergunta-img-error'));
 											}
 											return isLt2M;
 										}}
 									>
 										<Dragger
-											action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+											action={file => {
+												return uploadImage(file);
+											}}
+											// customRequest={(componentsData) => {
+											//   console.log(componentsData);
+											//   uploadImage(componentsData.file)
+											//     .then(componentsData.onSuccess("Ok"))
+											//     .catch(componentsData.onError("deu ruim"));
+											// }}
 											listType="picture-card"
 											fileList={fileList}
 											onPreview={handlePreview}
 											onChange={handleChange}
-											// disabled={fileList.length >= 1}
-											// beforeUpload={file => {
-											//   console.log('DASASPO', file)
-											//   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
-											//   if (!isJpgOrPng) {
-											//     message.error('You can only upload JPG/PNG file!');
-											//   }
-											//   const isLt2M = file.size / 1024 / 1024 < 0.00001;
-											//   if (!isLt2M) {
-											//     message.error('Image must smaller than 2MB!');
-											//   }
-											//   return (isJpgOrPng && isLt2M) || Upload.LIST_IGNORE;
-											// }}
-											// progress={({
-											//   strokeColor: {
-											//     '0%': '#108ee9',
-											//     '100%': '#87d068',
-											//   },
-											//   strokeWidth: 3,
-											//   format: percent => `${parseFloat(percent.toFixed(2))}%`,
-											// })}
 											maxCount={1}
 											style={{ marginBottom: '1rem' }}
+											name="image"
 										>
 											{fileList.length >= 1 ? (
 												<div style={{ padding: '0.25rem' }}>
 													<p className="ant-upload-text">
-														Limite de imagens alcançado!
+														{t('criar-pergunta-img-warn-limit')}
 													</p>
 													<p className="ant-upload-hint">
-														Adicionar novas imagens substituirá a última.
+														{t('criar-pergunta-img-warn-substitution')}
 													</p>
 												</div>
 											) : (
@@ -262,11 +258,10 @@ const CriaPergunta = props => {
 														<InboxOutlined />
 													</p>
 													<p className="ant-upload-text">
-														Clique ou arraste a imagem para esta área para fazer
-														upload
+														{t('criar-pergunta-img-placeholder')}
 													</p>
 													<p className="ant-upload-hint">
-														Suporta apenas fotos com menos de 1mb
+														{t('criar-pergunta-img-hint')}
 													</p>
 												</div>
 											)}
@@ -276,16 +271,16 @@ const CriaPergunta = props => {
 								<Col xs={12} sm={12}>
 									{CardCadastro({
 										icone: <FiChevronDown />,
-										titulo: 'Categorias',
-										descricao: 'Selecione a categoria que melhor representa a sua pergunta.',
-										children:
+										titulo: t('criar-pergunta-label-category'),
+										descricao: t('criar-pergunta-label-category-descp'),
+										children: (
 											<Select
 												showSearch
-												placeholder="Selecione uma categoria"
+												placeholder={t('criar-pergunta-label-category-select')}
 												optionFilterProp="children"
-												name={'id_categoria'}
+												name={'categoria'}
 												onChange={alteraCampoTipo}
-												value={campos.id_categoria}
+												value={campos.categoria}
 												// onSearch={onSearch}
 												filterOption={(input, option) =>
 													option.children
@@ -295,38 +290,32 @@ const CriaPergunta = props => {
 												bordered={false}
 												allowClear={true}
 												style={{ width: '100%' }}
-											>
-												<Option value="Ahaa">AHAN</Option>
-												<Option value="UHUMM">Uhumm</Option>
-												<Option value="é">é</Option>
-											</Select>
+												options={listData}
+											/>
+										)
 									})}
 								</Col>
 								<Col xs={12} sm={12}>
 									{CardCadastro({
 										icone: <FiTag />,
-										titulo: 'Tags',
-										descricao: 'Adicione algumas tags para complementar a sua pergunta.',
-										children:
+										titulo: t('criar-pergunta-label-tag'),
+										descricao: t('criar-pergunta-label-tag-descp'),
+										children: (
 											<TagGroup
 												tags={campos.tags}
 												alteraCampoTipo={alteraCampoTipo}
 											/>
+										)
 									})}
 								</Col>
 
 								<Col xs={12} sm={12} className="d-flex justify-content-between">
-									<Button
-										type="primary"
-										danger
-										onClick={() => navigate('/')}
-									>
-										Cancelar
+									<Button type="primary" danger onClick={() => navigate('/')}>
+										{t('criar-pergunta-cancel')}
 									</Button>
 									<Button type="primary" onClick={() => salvar(campos)}>
-										Confirmar
+										{t('criar-pergunta-confirm')}
 									</Button>
-									{console.log(campos)}
 								</Col>
 							</Space>
 						</Row>
@@ -334,57 +323,31 @@ const CriaPergunta = props => {
 					<Col xs={12} sm={12} xl={4}>
 						<Typography>
 							<Paragraph>
-								<pre style={{ padding: '1.25rem' }}>
+								<pre style={{ padding: '1.25rem', margin: '0' }}>
 									<Title level={4} className="text-center">
-										<ImCheckboxChecked /> &nbsp;Como fazer uma boa pergunta?
+										<ImCheckboxChecked /> &nbsp;{t('good-question-title')}
 									</Title>
 									<Divider />
-									<Title level={5}>1. Resuma o seu problema</Title>
+									<Title level={5}>{t('good-question-1')}</Title>
 									<Paragraph>
 										<ul>
-											<li>
-												Antes de fazer uma pergunta tenha em mente "qual é o
-												problema". Para isso é recomendado que primeiramente se
-												atente a reunir detalhes e informações que poderão ser
-												uteis.
-											</li>
-											<li>
-												Considere que uma pergunta não se caracteriza como boa
-												devido ao seu tamanho, mas sim devido às informações
-												fornecidas.
-											</li>
-											<li>
-												Opte por um título sucinto e detalhado, e recorra a
-												termos chaves, as tags podem ajudar nesse sentido.
-											</li>
+											<li>{t('good-question-1-descp')}</li>
+											<li>{t('good-question-1-descp-2')}</li>
+											<li>{t('good-question-1-descp-3')}</li>
 										</ul>
 									</Paragraph>
-									<Title level={5}>2. Descreva o seu problema</Title>
+									<Title level={5}>{t('good-question-2')}</Title>
 									<Paragraph>
 										<ul>
-											<li>
-												Apresente seu problema com o máximo de detalhes, o que
-												você já tentou e conte-nos o que você conseguiu até
-												então.
-											</li>
-											<li>
-												Lembre-se que conseguirá melhores respostas quando você
-												fornecer e detalhar melhor o seus dados.
-											</li>
-											<li>
-												Quando for apropriado, faça uso de imagens para
-												exemplificar melhor o problema.
-											</li>
+											<li>{t('good-question-2-descp')}</li>
+											<li>{t('good-question-2-descp-2')}</li>
+											<li>{t('good-question-2-descp-3')}</li>
 										</ul>
 									</Paragraph>
-									<Title level={5}>3. Objetivo final</Title>
+									<Title level={5}>{t('good-question-3')}</Title>
 									<Paragraph>
 										<ul>
-											<li>
-												O que é preciso para chegar a um resultado viável, tente
-												ser o mais claro possível em expressar qual é o seu
-												objetivo.
-											</li>
+											<li>{t('good-question-3-descp')}</li>
 										</ul>
 									</Paragraph>
 								</pre>
@@ -409,6 +372,6 @@ const CriaPergunta = props => {
 			</Modal>
 		</Fragment>
 	);
-}
+};
 
 export default CriaPergunta;

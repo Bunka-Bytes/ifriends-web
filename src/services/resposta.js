@@ -5,12 +5,13 @@ import {
   deleteResource
 } from './utils';
 import { RESPOSTAS } from '../utils/uri-api';
+import { PERGUNTAS } from '../utils/uri-api';
 
 export const getResposta = (codResposta) =>
   getResource(`${RESPOSTAS}/${encodeURIComponent(codResposta)}`);
 
-export const getRespostas = (filtro) =>
-  getResource(`${RESPOSTAS}${filtro}`);
+export const getRespostas = codPergunta =>
+	getResource(`${PERGUNTAS}/${encodeURIComponent(codPergunta)}/respostas`);
 
 export const postResposta = (resposta) => postResource(`${RESPOSTAS}`, resposta);
 

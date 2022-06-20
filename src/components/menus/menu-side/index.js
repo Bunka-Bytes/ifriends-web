@@ -1,82 +1,77 @@
-import React from 'react';
-import { Menu, Layout } from 'antd';
-import { FiSettings, FiHelpCircle } from 'react-icons/fi';
+import React from "react";
+import { useTranslation } from 'react-i18next';
+
+import { Menu, Layout } from "antd";
+import { FiSettings, FiHelpCircle } from "react-icons/fi";
 import {
-	IoHome,
-	IoCalendarClearOutline,
-	IoPricetagsOutline,
-	IoMenu
-} from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+  IoHome,
+  IoCalendarClearOutline,
+  IoPricetagsOutline,
+} from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 function getItem(key, icon, label, children) {
-	return {
-		key,
-		icon,
-		label,
-		children
-	};
+  return {
+    key,
+    icon,
+    label,
+    children,
+  };
 }
 
+const MenuSide = () => {
+   const { t } = useTranslation();
 
-
-const MenuSide = props => {
-	const items = [
+  const items = [
 		getItem(
 			'1',
 			<Link to="/">
-				<IoHome style={{ fontSize: '1.5rem' }} />
+				<IoHome className="icon-menu" />
 			</Link>,
-			'Perguntas'
+			t('menu-side-questions')
 		),
 		getItem(
 			'2',
 			<Link to="/eventos">
-				<IoCalendarClearOutline style={{ fontSize: '1.5rem' }} />
+				<IoCalendarClearOutline className="icon-menu" />
 			</Link>,
-			'Eventos'
+			t('footer-app-map-events')
 		),
 		getItem(
 			'3',
 			<Link to="/categorias">
-				<IoPricetagsOutline style={{ fontSize: '1.5rem' }} />
+				<IoPricetagsOutline className="icon-menu" />
 			</Link>,
-			'Categorias'
+			t('footer-app-map-category')
 		),
 		getItem(
 			'4',
 			<Link to="/ajuda">
-				<FiHelpCircle style={{ fontSize: '1.5rem' }} />
+				<FiHelpCircle className="icon-menu" />
 			</Link>,
-			'Ajuda'
+			t('menu-side-ajuda')
 		),
 		getItem(
 			'5',
 			<Link to="/config">
-				<FiSettings style={{ fontSize: '1.5rem' }} />
+				<FiSettings className="icon-menu" />
 			</Link>,
-			'Configurações'
+			t('footer-app-map-config')
 		)
 	];
 
-	return (
-		<Layout.Sider
-			collapsible
-			defaultCollapsed
-			className="layout-background"
-			style={{ width: '4rem !important' }}
-		>
-			<Menu
-				className="layout-background layout-sider"
-				mode="vertical"
-				style={{
-					display: 'grid',
-					alignContent: 'space-around',
-					alignItems: 'middle'
-				}}
-				items={items}
-			/>
-		</Layout.Sider>
-	);
+  return (
+    <Layout.Sider
+      collapsible
+      defaultCollapsed
+      className="layout-background layout-sider"
+    >
+      <Menu
+        className="layout-background layout-menu"
+        mode="vertical"
+        items={items}
+      />
+    </Layout.Sider>
+  );
 };
 export default MenuSide;

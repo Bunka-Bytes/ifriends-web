@@ -1,0 +1,130 @@
+{
+  "home-banner-title": "Have questions or want to share some knowledge? Browse IFriends!",
+  "home-banner-descricao":"Here you can ask, answer and even participate or mentor on a subject that you think is cool!",
+  "home-perguntas-title": "Latest Questions:",
+  "home-perguntas-not-found": "No questions found",
+  "home-criar-pergunta": "Create a question",
+
+  "label-answers":"Replies",
+  "label-answer":"Reply",
+  "label-authenticate":"You have to login to do that",
+  "label-your-answer":"Your reply",
+  "label-your-answer-small":"Do you know any answer that can help our Friend in this question? Send here!",
+  "label-days-ago":"days ago",
+  "label-views":"Views",
+  "label-likes":"Likes",
+  "label-like":"Like",
+  "label-answers-thks":"Thanks for the answer :)",
+  "label-remove-view":"Remove from view",
+  "label-report":"Report",
+  "label-edit": "Edit",
+  "label-mark": "Mark as best reply",
+  "label-now": "a few time ago",
+
+
+  "btn-perguntar":"Ask Question",
+  "btn-responder":"Reply",
+  "btn-ver-eventos":"View Events",
+  "btn-filtros":"Filter",
+
+
+  "btn-logout": "Sign Out",
+  "btn-login": "Sign In",
+  "btn-signup": "Sign Up",
+
+  "input-password": "Password",
+  "input-name": "Name",
+  "input-course": "Course",
+
+  "or-divider": "or",
+
+  "login-label": "Welcome back, Friend!",
+  "login-continue":"Continue without login",
+  "login-email-required": "Please enter your email",
+
+
+  "signup-label": "Sign Up and enter our community!",
+  "signup-tooltip-user-name": "",
+  "signup-tooltip-email": "Enter the email name and choose its domain on the right side.",
+  "signup-tooltip-password": "Enter a strong password, with at least 6-12 characters, upper and lower case letters, special characters and numbers",
+  "sinup-agreement": "I've read and accepted the ",
+
+  "terms-of-use-label": "Terms and conditions of use",
+
+
+  "menu-search-placeholder": "Search for a question",
+  "menu-select-idiom-label": "Language",
+
+  "footer-contact-list-label": "Contact",
+  "footer-contact-link": "Get in touch",
+  "footer-contact-politics-link": "Community policies",
+  "footer-app-map-label": "Our App",
+  "footer-app-map-home": "Home Page",
+
+  "menu-side-questions": "Questions",
+  "menu-side-ajuda": "Help Center",
+
+  "footer-app-map-events": "Events",
+  "footer-app-map-category": "Categories",
+  "footer-app-map-config": "Settings",
+  "footer-app-map-contact": "Contact",
+  "footer-app-map-api": "API",
+
+  "footer-author-rights": "All rights reserved",
+
+  "log-message-file-sent": "file sent with success",
+  "log-message-file-sent-error": "problems on sending file",
+  "log-message-question-sent": "Your question was created with success.",
+  "log-message-login-success": "You've logged in as ",
+  "log-message-session-timeout": "Your session has expired, please log in again.",
+
+  "rules-user-name-whitespace": "Names must not have whitespaces.",
+  "rules-user-name-required": "Please, enter the name!",
+  "rules-user-name-pattern": "The name must only contain letters and numbers.",
+  "rules-user-email-required": "Please, enter the email!",
+  "rules-user-email-pattern": "Don't insert an email domain",
+  "rules-user-password-require": "Please, enter the password!",
+  "rules-user-password-pattern": "The password must only have between 6-12 characters, with at least 1 uppercase letter, 1 lowercase letter, 1 special character and 1 number.",
+  "rules-user-user-agreement": "To complete your enrollment, you should accept the terms and conditions of use.",
+
+  "criar-pergunta-title": "Ask a question",
+  "criar-pergunta-label-title": "Title",
+  "criar-pergunta-label-title-descp": "Write a brief title that helps people to understand the problem objectively.",
+  "criar-pergunta-placeholder-write": "Write here",
+  "criar-pergunta-label-problem": "Problem description",
+  "criar-pergunta-label-problem-descp": "Put all the necessary information for your collegues to answer your question properly.",
+
+  "criar-pergunta-img-edit": "Edit image",
+  "criar-pergunta-img-cancel": "Cancel",
+  "criar-pergunta-img-confirm": "Confirm",
+  "criar-pergunta-img-error": "The image's size must be under 1MB",
+  
+  "criar-pergunta-img-warn-limit": "The updloading images limit was achieved!",
+  "criar-pergunta-img-warn-substitution": "Adding new images will substitute the existing ones",
+  "criar-pergunta-img-placeholder": "Click or drag and drop an image in this area to upload it",
+
+  "criar-pergunta-img-hint": "Supports only sizes under 1MB",
+
+  "criar-pergunta-label-category": "Categories",
+  "criar-pergunta-label-category-descp": "Select a category that represents better your question.",
+  "criar-pergunta-label-category-select": "Select a category",
+
+
+  "criar-pergunta-label-tag": "Tags","criar-pergunta-label-tag-descp": "Add some tags to support your question.",
+  "criar-pergunta-cancel": "Cancel",
+  "criar-pergunta-confirm": "Confirm",
+  
+  "good-question-title": "How to write a good question?",
+  "good-question-1": "1. Summarize your problem",
+  "good-question-1-descp": "Before asking a question, remind yourself about your problem. For that, it's recommended that you first beware of details and informations that can be useful for your collegues.",
+  "good-question-1-descp-2":"Remember that a question is not classified as 'good' because of its size, but because of the information you give.",
+  "good-question-1-descp-3":"Choose a brief and objective title, and use key terms - the tags can help in this case.",
+
+  "good-question-2": "2. Describe your problem",
+  "good-question-2-descp": "Give us the as much details as possible, such as what you've tried and what you've done so far.",
+  "good-question-2-descp-2": "Remember that you''l have the best answers if you detail your question better.",
+  "good-question-2-descp-3":"When it's appropriate, make use of images to improve your problem's description.",
+
+   "good-question-3": "3. Final objective",
+   "good-question-3-descp": "This is what is needed for a good result: try to be as specific as possible and make sure your objective is evident."
+}

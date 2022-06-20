@@ -1,116 +1,278 @@
-import React, {useEffect, useState,} from 'react';
+import React, { useEffect, useState, createElement } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { t } from 'i18next';
+
 // ------- STYLES -----
-import './styles.css'
+import './index.css'
 // ------- COMPONENTS -----
 // Antd and Bootstrap
 import Container from 'react-bootstrap/Container';
-import { Card, Col, Row, Avatar, Tag, Dropdown, Menu, Tooltip } from 'antd';
+import {
+	Card,
+	Col,
+	Row,
+	Avatar,
+	Tag,
+	Dropdown,
+	Menu,
+	Tooltip,
+	Typography,
+	message
+} from 'antd';
 
 
 // Created
-import { getPerguntas } from '../../../services/perguntas';
+import CardPergunta from '../../home/cardPergunta';
 
 // ------ ICONS -----
 import {
 	EditOutlined,
+	LikeFilled,
 	LikeOutlined,
 	StarOutlined
 } from '@ant-design/icons';
 import { FaRegThumbsUp, FaRegComment, FaRegEye } from 'react-icons/fa';
-import { IoIosUndo } from 'react-icons/io';
-import { FiMoreVertical, FiTrash2 } from 'react-icons/fi';
-import { GoMegaphone } from 'react-icons/go';
-import { AiOutlineUser } from 'react-icons/ai';
+import { FiMoreVertical, FiTrash2, FiAlertCircle } from 'react-icons/fi';
+import { AiOutlineUser, AiOutlineEdit } from 'react-icons/ai';
 
+// ------ COMMONS ------
+import ListTags from "../../common/list-tags";
+import Button from "../../common/button";
+
+// Services
+import { getPergunta } from '../../../services/pergunta'; 
+import { getCurtidasUsuario } from '../../../services/usuario'; 
+import { postCurtidaPergunta } from '../../../services/curtidas-pergunta';
+
+
+// ------ FUNCTIONS ------
+import { dateDifferenceInDays } from "../../../utils/functions";
+import { isAuthenticated } from '../../../services/auth';
 
 // Destructuring
 const { Meta } = Card;
 
-const menu = (
+const onClick = ({ key }) => {
+	if (key === '1') {
+		// chamar aqui o metodo de deleção
+	}
+	// pensar num lugar pra colocar as perguntas deletadas
+ };
+
+
+
+const Pergunta = props => {
+	const { idPergunta } = props;
+	const [likes, setLikes] = useState(0);
+	const [action, setAction] = useState('unliked');
+	const [perguntaData, setPerguntaData] = useState({});
+	const [curtidasUsuario, setCurtidasUsuario] = useState([]);
+	const { t } = useTranslation();
+
+	const menu = (
 		<Menu
+			align="start"
+			onClick={onClick}
 			items={[
 				{
-					label: (
-						<a
-							target="_blank"
-							rel="noopener noreferrer"
-							href="https://www.antgroup.com"
-						>
-							Remover da visualização
-						</a>
-					),
+					key: '1',
+					label: t('label-remove-view'),
 					icon: <FiTrash2 />
 				},
 
 				{
-					danger: true,
-					label: 'Reportar',
-					icon: <GoMegaphone />
+					key: '2',
+					label: t('label-edit'),
+					icon: <AiOutlineEdit />
 				}
 			]}
 		/>
- );
-
-
-const Pergunta = props => {
-	const [perguntaData, setPerguntaData] = useState([]);
+	);
 
 	useEffect(() => {
-		console.log('GETzin');
-		getPerguntas('?').then(request => {
-			let pergunta = request.data(p => ({
-				key: props.idPergunta,
-				id: pergunta.id,
-				titulo: pergunta.titulo,
-				descricao: pergunta.texto,
-				imgPerfil: pergunta.usuario.imagem,
-				data: `${Math.ceil(Math.random() * 12)} dias atrás`,
-				curtidas: Math.ceil(Math.random() * 100),
-				comentarios: Math.ceil(Math.random() * 50),
-				visualizacoes: Math.ceil(Math.random() * 1000),
-				nomeCategoria: pergunta.categoria.nome
-			}));
+		console.log('Busca por id', idPergunta);
+		getPergunta(idPergunta)
+			.then(request => {
+				console.log('dadosPergunta', request.data);
+				let dadosPergunta = request.data;
+				const { dataEmissao } = dadosPergunta;
+				const newDataEmissao = new Date(
+					`${dataEmissao[0]}-${dataEmissao[1]}-${dataEmissao[2]}`
+				);
+				const dateToday = new Date();
 
-			setPerguntaData(pergunta);
-		});
+				const differDatesInDays = dateDifferenceInDays(
+					newDataEmissao,
+					dateToday
+				);
+
+				let pergunta = {
+					key: dadosPergunta.id,
+					id: dadosPergunta.id,
+					titulo: dadosPergunta.titulo,
+					descricao: dadosPergunta.texto,
+					autor: dadosPergunta.usuario.nome,
+					autorEmail: dadosPergunta.usuario.email,
+					imgPerfil: dadosPergunta.usuario.imagem,
+					data:
+						differDatesInDays === 0
+							? t('label-now')
+							: `${differDatesInDays} ${t('label-days-ago')}`,
+					curtidas: dadosPergunta.qtdCurtida,
+					comentarios: dadosPergunta.qtdResposta,
+					visualizacoes: Math.ceil(Math.random() * 1000),
+					nomeCategoria: dadosPergunta.categoria.nome,
+					tags: dadosPergunta.tags
+				};
+
+				setPerguntaData(pergunta);
+			})
+			.catch(error => {
+				console.log(error);
+				return message.error(
+					error.response.data + ' - ' + error.code + ' ' + error.response.status
+				);
+			});
 	}, []);
+
+	useEffect(() => {
+		if (isAuthenticated()) {
+			getCurtidasUsuario()
+				.then(response => {
+					let curtidas = response.data;
+					console.log('Curtidas:', curtidas);
+					setCurtidasUsuario(curtidas);
+
+				})
+				.catch(error => {
+					console.log(error);
+					return message.error(
+						error.response.data + ' - ' + error.code + ' ' + error.response.status
+					);
+				});
+		}
+		return;
+	}, [])
+	
+
+	const like = () => {
+		if (isAuthenticated()) {
+			postCurtidaPergunta(perguntaData.id).then(
+				response => {
+					console.log(response.data);
+					if (response.data === true ) {
+						setAction('liked');
+						setLikes(perguntaData.curtidas);
+					}
+					else {
+						setAction('unliked');
+						setLikes(perguntaData.curtidas);
+					}
+				},
+				error => {
+					console.log(error);
+					return message.error(
+						error.response.data +
+							' - ' +
+							error.code +
+							' ' +
+							error.response.status
+					);
+				}
+			);
+		} else {
+			message.info(t('label-authenticate'));
+		}
+	};
+	
+
+	const verifyLike = () => {
+		let verify = curtidasUsuario.filter(
+			curtida => curtida.pergunta.id === perguntaData.id
+		);
+		if (verify.length !== 0) return true;
+		return false;
+	}
+
 	return (
-		<Card className="card-box">
+		<Card className="card-box" style={{ marginBottom: '2rem' }}>
 			<Container>
 				<Row justify="space-between" align="middle">
 					<Col style={{ marginBottom: '0.75rem' }}>
-						<Tag color={'var(--purple)'}>{perguntaData.nomeCategoria}</Tag>
-						<Tag color={'var(--red-medium)'}>Erro</Tag>
+						<ListTags tags={perguntaData.tags} />
 					</Col>
 					<Col>
-						<Dropdown overlay={menu}>
-							<a onClick={e => e.preventDefault()}>
-								<FiMoreVertical />
-							</a>
-						</Dropdown>
+						{isAuthenticated() &&
+						sessionStorage.getItem('@user-email') ===
+							perguntaData.autorEmail ? (
+							<Dropdown overlay={menu} placement="bottomRight" arrow>
+								<a onClick={e => e.preventDefault()}>
+									<FiMoreVertical />
+								</a>
+							</Dropdown>
+						) : (
+							<></>
+						)}
 					</Col>
 				</Row>
-				<Row justify="start" align="middle">
+				<Row justify="start" align="middle" style={{ marginBottom: '0.75rem' }}>
 					<Col>
 						<Avatar
-							breakpoints={['xxxl', 'xxl', 'xl', 'lg', 'md', 'sm', 'xs', 'xxs']}
+							src={perguntaData.imgPerfil || null}
 							icon={<AiOutlineUser />}
+							size="large"
 							className="icons"
 							style={{ marginRight: '1rem' }}
 						/>
 					</Col>
 					<Col>
-						<Col>{perguntaData.titulo}</Col>
 						<Col>
-							<Meta description={<small>data</small>} />
+							<strong>{perguntaData.autor}</strong>
+						</Col>
+						<Col>
+							<Meta description={<small>{perguntaData.data}</small>} />
 						</Col>
 					</Col>
 				</Row>
-				<Row justify="space-between">
+
+				<Row style={{ marginTop: '1rem' }}>
+					<Typography.Title level={4}>{perguntaData.titulo}</Typography.Title>
+				</Row>
+
+				<Row>
+					<Typography.Paragraph>{perguntaData.descricao}</Typography.Paragraph>
+				</Row>
+
+				<Row
+					justify="space-between"
+					align="middle"
+					style={{ marginTop: '1rem' }}
+				>
 					<Col xs={4} sm={4} md={2} xl={1}>
-						<Tooltip title={'Curtidas'}>
-							<FaRegThumbsUp /> {1}{' '}
-						</Tooltip>
+						<Button
+							type="primary"
+							icon={createElement(
+								verifyLike() === true || action === 'liked' ? LikeFilled : LikeOutlined
+							)}
+							onClick={like}
+							label={t('label-like')}
+							ghost
+						/>
+					</Col>
+					<Col>
+						<Button
+							type="primary"
+							icon={
+								<FiAlertCircle
+									color="white"
+									style={{ marginRight: '0.25rem' }}
+								/>
+							}
+							onClick={e => e.preventDefault()}
+							label={t('label-report')}
+							danger
+						/>
 					</Col>
 				</Row>
 			</Container>

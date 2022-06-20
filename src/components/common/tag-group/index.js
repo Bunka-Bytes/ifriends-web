@@ -1,19 +1,23 @@
-import React, { Fragment } from 'react'
-import { Tooltip, Tag, Input } from 'antd';
-import { TweenOneGroup } from 'rc-tween-one';
-import { PlusOutlined } from '@ant-design/icons';
-import './styles.css'
+import React, { Fragment } from "react";
+import { Tooltip, Tag, Input } from "antd";
+import { TweenOneGroup } from "rc-tween-one";
+import { PlusOutlined } from "@ant-design/icons";
+import "./styles.css";
+// ------ CONSTANTS ------
+import { SIZE_LIM_TAG } from "../../../utils/constants";
 
 export default class EditableTagGroup extends React.Component {
   state = {
     inputVisible: false,
-    inputValue: '',
+    inputValue: "",
     editInputIndex: -1,
-    editInputValue: '',
+    editInputValue: "",
   };
 
-  handleClose = removedTag => {
-    const tags = this.props.tags.filter(tag => tag.toLowerCase() !== removedTag.toLowerCase());
+  handleClose = (removedTag) => {
+    const tags = this.props.tags.filter(
+      (tag) => tag.toLowerCase() !== removedTag.toLowerCase()
+    );
     this.props.alteraCampoTipo(tags, "tags");
   };
 
@@ -21,25 +25,30 @@ export default class EditableTagGroup extends React.Component {
     this.setState({ inputVisible: true }, () => this.input.focus());
   };
 
-  handleInputChange = e => {
+  handleInputChange = (e) => {
     this.setState({ inputValue: e.target.value });
   };
 
   handleInputConfirm = () => {
     const { inputValue } = this.state;
     let { tags } = this.props;
-    if (inputValue && tags.findIndex(tag => tag.toLowerCase() === inputValue.toLowerCase()) === -1) {
+    if (
+      inputValue &&
+      tags.findIndex(
+        (tag) => tag.toLowerCase() === inputValue.toLowerCase()
+      ) === -1
+    ) {
       tags = [...tags, inputValue];
     }
-    console.log(tags);
+
     this.setState({
       inputVisible: false,
-      inputValue: '',
+      inputValue: "",
     });
-    this.props.alteraCampoTipo(tags, "tags")
+    this.props.alteraCampoTipo(tags, "tags");
   };
 
-  handleEditInputChange = e => {
+  handleEditInputChange = (e) => {
     this.setState({ editInputValue: e.target.value });
   };
 
@@ -60,24 +69,25 @@ export default class EditableTagGroup extends React.Component {
       const newTags = [...this.props.tags];
       newTags[editInputIndex] = editInputValue;
 
-      this.props.alteraCampoTipo(newTags, "tags")
+      this.props.alteraCampoTipo(newTags, "tags");
       return {
         editInputIndex: -1,
-        editInputValue: '',
+        editInputValue: "",
       };
     });
   };
 
-  saveInputRef = input => {
+  saveInputRef = (input) => {
     this.input = input;
   };
 
-  saveEditInputRef = input => {
+  saveEditInputRef = (input) => {
     this.editInput = input;
   };
 
   render() {
-    const { inputVisible, inputValue, editInputIndex, editInputValue } = this.state;
+    const { inputVisible, inputValue, editInputIndex, editInputValue } =
+      this.state;
     const { tags } = this.props;
     return (
       <>
@@ -97,7 +107,7 @@ export default class EditableTagGroup extends React.Component {
             );
           }
 
-          const isLongTag = tag.length > 20;
+          const isLongTag = tag.length > SIZE_LIM_TAG;
 
           const tagElem = (
             <Tag
@@ -107,16 +117,17 @@ export default class EditableTagGroup extends React.Component {
               onClose={() => this.handleClose(tag)}
             >
               <span
-                onDoubleClick={e => {
-                  if (index !== 0) {
-                    this.setState({ editInputIndex: index, editInputValue: tag }, () => {
+                onDoubleClick={(e) => {
+                  this.setState(
+                    { editInputIndex: index, editInputValue: tag },
+                    () => {
                       this.editInput.focus();
-                    });
-                    e.preventDefault();
-                  }
+                    }
+                  );
+                  e.preventDefault();
                 }}
               >
-                {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                {isLongTag ? `${tag.slice(0, SIZE_LIM_TAG)}...` : tag}
               </span>
             </Tag>
           );
@@ -150,7 +161,6 @@ export default class EditableTagGroup extends React.Component {
     );
   }
 }
-
 
 // export default class EditableTagGroup extends React.Component {
 //   constructor(props) {

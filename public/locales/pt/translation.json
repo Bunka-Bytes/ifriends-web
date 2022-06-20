@@ -1,0 +1,130 @@
+{
+  "home-banner-title": "Está com dúvidas ou quer compartilhar o que sabe? Navegue pelo IFriends!",
+  "home-banner-descricao":"Aqui você pode perguntar, responder e ainda participar ou dar mentorias sobre um assunto que ache legal!",
+  "home-perguntas-title": "Últimas Perguntas:",
+  "home-perguntas-not-found": "Não foram encontradas perguntas",
+  "home-criar-pergunta": "Criar uma pergunta",
+
+  "label-answers":"Respostas",
+  "label-answer":"Resposta",
+  "label-authenticate":"Você precisa esta logado para essa ação",
+  "label-your-answer":"Sua resposta",
+  "label-your-answer-small":"Conhece uma resposta para ajudar nosso amigo nessa dúvida? Mande a sua resposta!",
+  "label-days-ago":"dias atrás",
+  "label-views":"Visualizações",
+  "label-likes":"Curtidas",
+  "label-like":"Curtir",
+  "label-answers-thks":"Obrigado pela resposta :)",
+  "label-remove-view":"Remover da visualização",
+  "label-report":"Reportar",
+  "label-edit": "Editar",
+  "label-mark": "Marcar como melhor resposta",
+  "label-now": "há pouco tempo",
+
+
+
+  "btn-perguntar":"Perguntar",
+  "btn-responder":"Responder",
+  "btn-ver-eventos":"Ver Eventos",
+  "btn-filtros":"Filtros",
+
+  "btn-logout": "Sair",
+  "btn-login": "Entrar",
+  "btn-signup": "Cadastrar",
+
+  "input-password": "Senha",
+  "input-name": "Nome",
+  "input-course": "Curso",
+
+  "or-divider": "ou",
+
+  "login-label": "Bem vind@ de volta, Friend!",
+  "login-continue":"Continuar sem login",
+  "login-email-required": "Por favor, insira o email",  
+
+  "signup-label": "Cadastre-se e faça parte da comunidade!",
+  "signup-tooltip-user-name": "Escreva seu nome completo neste campo.",
+  "signup-tooltip-email": "Digite o email e escolha seu domínio ao lado.",
+  "signup-tooltip-password": "Digite uma senha forte, entre 6-12 caracteres com maiúsculas, minusculas, caracteres especiais e números.",
+  "sinup-agreement": "Eu li e concordo com os",
+  
+  "terms-of-use-label": "Termos de uso e condições",
+
+
+  "menu-search-placeholder": "Pesquise por uma pergunta",
+  "menu-select-idiom-label": "Idioma",
+
+  "footer-contact-list-label": "Atendimento",
+  "footer-contact-link": "Entrar em contato",
+  "footer-contact-politics-link": "Políticas da comunidade",
+  "footer-app-map-label": "Mapa da aplicação",
+  "footer-app-map-home": "Página Inicial",
+
+  "menu-side-questions": "Perguntas",
+  "menu-side-ajuda": "Ajuda",
+
+  "footer-app-map-events": "Eventos",
+  "footer-app-map-category": "Categorias",
+  "footer-app-map-config": "Configurações",
+  "footer-app-map-contact": "Contato",
+  "footer-app-map-api": "API",
+
+  "footer-author-rights": "Todos os direitos reservados",
+
+  "log-message-file-sent": "arquivo enviado com sucesso",
+  "log-message-file-sent-error": "arquivo enviado com falha.",
+  "log-message-question-sent": "Sua pergunta foi salva com sucesso.",
+  "log-message-login-success": "Você logou como ",
+  "log-message-session-timeout": "Sua sessão expirou, por favor entre novamente.",
+
+  "rules-user-name-whitespace": "O nome não conter apenas espaços em branco.",
+  "rules-user-name-required": "Por favor, insira o nome!",
+  "rules-user-name-pattern": "O nome só pode conter letras e números.",
+  "rules-user-email-required": "Por favor, insira o email!",
+  "rules-user-email-pattern": "Não insira o domínio de email",
+  "rules-user-password-require": "Por favor, inserir a senha!",
+  "rules-user-password-pattern": "A senha deve conter entre 6-12 caracteres com ao menos 1 maiúsculas, 1 minusculas, 1 caracter especial e 1 número.",
+  "rules-user-user-agreement": "Para completar o cadastro é necessário aceitar os termos de uso.",
+
+
+
+  "criar-pergunta-title": "Faça a sua pergunta",
+  "criar-pergunta-label-title": "Título",
+  "criar-pergunta-label-title-descp": "Informe um título sucinto que ajude a compreender melhor o problema.",
+  "criar-pergunta-placeholder-write": "Escreva aqui",
+  "criar-pergunta-label-problem": "Descrição do Problema",
+  "criar-pergunta-label-problem-descp": "Inclua todas as informações necessárias para alguém conseguir responder sua pergunta.",
+
+  "criar-pergunta-img-edit": "Editar Foto",
+  "criar-pergunta-img-cancel": "Cancelar",
+  "criar-pergunta-img-confirm": "Confirmar",
+  "criar-pergunta-img-error": "A imagem deve ser menor que 1MB",
+  
+  "criar-pergunta-img-warn-limit": "Limite de imagens alcançado!",
+  "criar-pergunta-img-warn-substitution": "Adicionar novas imagens substituirá a última.",
+  "criar-pergunta-img-placeholder": "Clique ou arraste a imagem para esta área para fazer upload",
+  "criar-pergunta-img-hint": "Suporta apenas fotos com menos de 1mb",
+
+  "criar-pergunta-label-category": "Categorias",
+  "criar-pergunta-label-category-descp": "Selecione a categoria que melhor representa a sua pergunta.",
+  "criar-pergunta-label-category-select": "Selecione uma categoria",
+
+
+  "criar-pergunta-label-tag": "Tags","criar-pergunta-label-tag-descp": "Adicione algumas tags para complementar a sua pergunta.",
+  "criar-pergunta-cancel": "Cancelar",
+  "criar-pergunta-confirm": "Confirmar",
+  
+  "good-question-title": "Como fazer uma boa pergunta?",
+  "good-question-1": "1. Resuma o seu problema",
+  "good-question-1-descp": "Antes de fazer uma pergunta tenha em mente 'qual é o problema'. Para isso é recomendado que primeiramente se atente a reunir detalhes e informações que poderão ser uteis.",
+  "good-question-1-descp-2":"Considere que uma pergunta não se caracteriza como boa devido ao seu tamanho, mas sim devido às informações fornecidas.",
+  "good-question-1-descp-3":"Opte por um título sucinto e detalhado, e recorra a termos chaves - as tags podem ajudar nesse sentido.",
+
+  "good-question-2": "2. Descreva o seu problema",
+  "good-question-2-descp": "Apresente seu problema com o máximo de detalhes, o que você já tentou e conte-nos o que você conseguiu até então.",
+  "good-question-2-descp-2": "Lembre-se que conseguirá melhores respostas quando você fornecer e detalhar melhor o seus dados.",
+  "good-question-2-descp-3":"Quando for apropriado, faça uso de imagens para exemplificar melhor o problema.",
+
+  "good-question-3": "3. Objetivo final",
+  "good-question-3-descp": "O que é preciso para chegar a um resultado viável, tente ser o mais claro possível em expressar qual é o seu objetivo."
+}

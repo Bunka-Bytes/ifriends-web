@@ -1,4 +1,5 @@
-import { createStore } from 'redux'
-import { Reducers } from './reducers'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from "redux-thunk" 
+import { Reducers } from './modules'
 
-export const Store = createStore(Reducers)
+export const store = createStore(Reducers, applyMiddleware(thunk))

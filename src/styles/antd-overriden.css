@@ -1,0 +1,98 @@
+/* Overiding antd CSS */
+
+/* Layout */
+.ant-layout-content{
+    margin-top: 2rem;
+}
+
+/* Menu */
+.ant-menu-item-icon {
+    color: var(--white)!important;
+}
+
+.ant-menu-item-active{
+    color: var(--white)!important;
+    font-weight: bolder!important;
+}
+
+.ant-menu-item-selected{
+    background: var(--background);
+}
+
+.ant-menu-item-selected .ant-menu-item-icon, 
+.ant-menu-item-selected .ant-menu-title-content{
+    color: var(--blue-dark)!important;
+}
+
+
+.ant-layout-sider-dark{
+    flex: 0 0 0 !important;
+    min-width: none !important;
+}
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left{
+    border: 0;
+}
+
+.ant-layout-sider-trigger{
+    background: none;
+}
+
+.ant-menu-light .ant-menu-item:hover, .ant-menu-light .ant-menu-item-active, .ant-menu-light .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-light .ant-menu-submenu-active, .ant-menu-light .ant-menu-submenu-title:hover, .ant-menu-item-selected {
+    color: var(--purple-medium);
+}
+
+/* Buttons */
+.ant-btn:hover, .ant-btn:focus{
+    color: var(--purple-medium);
+    border-color: var(--purple)
+}
+
+.ant-btn-icon-only:hover,
+.ant-btn-icon-only:focus {
+    border-color: transparent;
+}
+
+/* Primary */
+.ant-btn-primary{
+    color: var(--white)!important;
+	background-color: var(--blue-dark);
+    border-color: var(--blue-dark);
+}
+
+.ant-btn-background-ghost{
+    color: var(--blue-dark) !important;
+    border-color: var(--blue-dark)!important;
+}
+
+.ant-btn-background-ghost:hover .ant-btn-background-ghost:focus {
+    font-weight: bolder !important;
+}
+.ant-btn-primary:hover, .ant-btn-primary:focus{
+    font-weight: bolder!important;
+	background-color: var(--blue-dark);
+    border-color: var(--blue-medium);
+}
+
+.ant-btn-primary:active{
+    color: var(--white);
+	background-color: var(--blue-medium);
+    border-color: var(--blue-medium);
+}
+
+/* Input */
+
+.ant-input-affix-wrapper:focus, .ant-input-affix-wrapper-focused{
+    border-color: var(--blue-dark);
+    box-shadow: var(--blue-light);
+}
+
+.ant-input-affix-wrapper:not(.ant-input-affix-wrapper-disabled):hover{
+    border-color: var(--blue-light);
+}
+
+/* Icon */
+
+span.anticon svg {
+    vertical-align: baseline;
+}
