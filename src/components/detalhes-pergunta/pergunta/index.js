@@ -47,7 +47,7 @@ import { postCurtidaPergunta } from '../../../services/curtidas-pergunta';
 
 
 // ------ FUNCTIONS ------
-import { dateDifferenceInDays } from "../../../utils/functions";
+import { getBeetweenDateWithTextForApiDate } from '../../../utils/functions';
 import { isAuthenticated } from '../../../services/auth';
 
 // Destructuring
@@ -97,15 +97,6 @@ const Pergunta = props => {
 				console.log('dadosPergunta', request.data);
 				let dadosPergunta = request.data;
 				const { dataEmissao } = dadosPergunta;
-				const newDataEmissao = new Date(
-					`${dataEmissao[0]}-${dataEmissao[1]}-${dataEmissao[2]}`
-				);
-				const dateToday = new Date();
-
-				const differDatesInDays = dateDifferenceInDays(
-					newDataEmissao,
-					dateToday
-				);
 
 				let pergunta = {
 					key: dadosPergunta.id,
@@ -115,10 +106,7 @@ const Pergunta = props => {
 					autor: dadosPergunta.usuario.nome,
 					autorEmail: dadosPergunta.usuario.email,
 					imgPerfil: dadosPergunta.usuario.imagem,
-					data:
-						differDatesInDays === 0
-							? t('label-now')
-							: `${differDatesInDays} ${t('label-days-ago')}`,
+					data: getBeetweenDateWithTextForApiDate(dataEmissao),
 					curtidas: dadosPergunta.qtdCurtida,
 					comentarios: dadosPergunta.qtdResposta,
 					visualizacoes: Math.ceil(Math.random() * 1000),

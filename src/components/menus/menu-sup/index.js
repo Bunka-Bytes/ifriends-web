@@ -100,7 +100,7 @@ const MenuSup = (props) => {
   };
 
   const optionsLanguage = [
-		{ key: 'pt', value: 'pt', label: 'Português' },
+		{ key: 'pt', value: 'pt-BR', label: 'Português' },
 		{ key: 'en', value: 'en', label: 'English' }
 	];
 
@@ -213,11 +213,7 @@ const MenuSup = (props) => {
 							<>
 								<Select
 									name="language"
-									value={
-										localStorage.getItem('i18nextLng') === 'pt'
-											? ' Português'
-											: campos.language
-									}
+									value={locale}
 									options={optionsLanguage}
 									onChange={value => changeLocale(value)}
 									bordered={false}

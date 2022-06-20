@@ -19,7 +19,7 @@
   "label-report":"Reportar",
   "label-edit": "Editar",
   "label-mark": "Marcar como melhor resposta",
-  "label-now": "há pouco tempo",
+  "label-now": "segundos atrás",
 
   "working-comming-soon": "Em Breve",
   "working-comming-soon-label": "Desculpe, esta página ainda está em desenvolvimento",
@@ -50,7 +50,7 @@
   "signup-tooltip-password": "Digite uma senha forte, entre 6-12 caracteres com maiúsculas, minusculas, caracteres especiais e números.",
   "sinup-agreement": "Eu li e concordo com os",
   
-  "terms-of-use-label": "Termos de uso e condições",
+  "terms-of-use-label": " Termos de uso e condições",
 
 
   "menu-search-placeholder": "Pesquise por uma pergunta",

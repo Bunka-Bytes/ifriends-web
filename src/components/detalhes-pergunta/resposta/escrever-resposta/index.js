@@ -33,7 +33,7 @@ import { postCurtidaResposta } from '../../../../services/curtidas-resposta';
 
 
 // ------ FUNCTIONS ------
-import { dateDifferenceInDays } from "../../../../utils/functions";
+import { getBeetweenDateWithTextForApiDate } from '../../../../utils/functions';
 
 import CardCadastro from '../../../common/card-cadastro';
 const { TextArea } = Input;
@@ -159,22 +159,6 @@ const Comentario = (props) => {
 	const { t } = useTranslation();
 	
   	const { idPergunta } = props;
-
-  	const exibirdata = (resposta) => {
-    const { dataEmissao } = resposta;
-    const newDataEmissao = new Date(
-      `${dataEmissao[0]}-${dataEmissao[1]}-${dataEmissao[2]}`
-    );
-    const dateToday = new Date();
-
-    const differDatesInDays = dateDifferenceInDays(
-      newDataEmissao,
-      dateToday
-    );
-
-    return differDatesInDays;
-	}
-	
 	
   useEffect(() => {
     getRespostas(idPergunta)
@@ -182,8 +166,10 @@ const Comentario = (props) => {
 				console.log('dadosResposta', request.data);
 
 				let comments = request.data.map(resposta => {
+    				const { dataEmissao } = resposta;
+
 					return {
-						key:  resposta.id,
+						key: resposta.id,
 						content: resposta.texto,
 						author: resposta.usuario.nome,
 						avatar: (
@@ -194,10 +180,7 @@ const Comentario = (props) => {
 								size={30}
 							/>
 						),
-						datetime:
-							exibirdata(resposta) === 0
-								? t('label-now')
-								: `${exibirdata(resposta)} ${t('label-days-ago')}`,
+						datetime: getBeetweenDateWithTextForApiDate(dataEmissao)
 					};
 					
 				});
@@ -226,6 +209,7 @@ const Comentario = (props) => {
 					.then(request => {
 						message.success(t('label-answers-thks'));
 						console.log('dadosResposta', request.data);
+    					const { dataEmissao } = request.data;
 
 						setComments([
 							...comments,
@@ -242,10 +226,7 @@ const Comentario = (props) => {
 								),
 								autorEmail: request.data.usuario.email,
 								content: <span>{request.data.texto}</span>,
-								datetime:
-									exibirdata(request.data) === 0
-										? t('label-now')
-										: `${exibirdata(request.data)} ${t('label-days-ago')}`
+								datetime: getBeetweenDateWithTextForApiDate(dataEmissao)
 							}
 						]);
 					})

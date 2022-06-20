@@ -19,12 +19,11 @@
   "label-report":"Report",
   "label-edit": "Edit",
   "label-mark": "Mark as best reply",
-  "label-now": "a few time ago",
+  "label-now": " seconds ago",
 
   "working-comming-soon": "Comming soon",
   "working-comming-soon-label": "We're still working on that page",
   "working-comming-soon-home": "Go home instead",
-
 
   "btn-perguntar":"Ask Question",
   "btn-responder":"Reply",
@@ -114,7 +113,8 @@
   "criar-pergunta-label-category-select": "Select a category",
 
 
-  "criar-pergunta-label-tag": "Tags","criar-pergunta-label-tag-descp": "Add some tags to support your question.",
+  "criar-pergunta-label-tag": "Tags",
+  "criar-pergunta-label-tag-descp": "Add some tags to support your question.",
   "criar-pergunta-cancel": "Cancel",
   "criar-pergunta-confirm": "Confirm",
   

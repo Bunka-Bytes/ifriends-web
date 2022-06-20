@@ -24,7 +24,7 @@ import { connect } from "react-redux";
 import { selecionarBusca } from "../../redux/modules/filtro";
 
 // ------ FUNCTIONS ------
-import { dateDifferenceInDays } from "../../utils/functions";
+import { getBeetweenDateWithTextForApiDate } from '../../utils/functions';
 import { useTranslation } from "react-i18next";
 
 const Home = (props) => {
@@ -45,15 +45,6 @@ const Home = (props) => {
 
 				let lista = request.data.map(pergunta => {
 					const { dataEmissao } = pergunta;
-					const newDataEmissao = new Date(
-						`${dataEmissao[0]}-${dataEmissao[1]}-${dataEmissao[2]}`
-					);
-					const dateToday = new Date();
-
-					const differDatesInDays = dateDifferenceInDays(
-						newDataEmissao,
-						dateToday
-					);
 
 					return {
 						key: pergunta.id,
@@ -62,10 +53,7 @@ const Home = (props) => {
 						descricao: pergunta.texto,
 						autor: pergunta.usuario.nome,
 						imgPerfil: pergunta.usuario.imagem,
-						data:
-							differDatesInDays === 0
-								? t('label-now')
-								: `${differDatesInDays} ${t('label-days-ago')}`,
+						data: getBeetweenDateWithTextForApiDate(dataEmissao),
 						curtidas: pergunta.qtdCurtida,
 						comentarios: pergunta.qtdResposta,
 						visualizacoes: Math.ceil(Math.random() * 1000),
