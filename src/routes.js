@@ -8,7 +8,7 @@ import CriaPergunta from './components/cria-pergunta';
 import Login from './components/auth/login';
 import Cadastro from './components/auth/cadastro';
 
-import NotFound from './components/common/status/not-found';
+import NotFound from './components/common/not-found';
 import Working from './components/common/working';
 import { isAuthenticated } from './services/auth';
 

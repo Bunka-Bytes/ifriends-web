@@ -18,10 +18,10 @@ const ListTags = (props) => {
         const isLongTag = tag.length > SIZE_LIM_TAG;
 
         const tagElem = (
-          <Tag color={stringToColour(tag)}>
-            {isLongTag ? `${tag.slice(0, SIZE_LIM_TAG)}...` : tag}
-          </Tag>
-        );
+					<Tag color={stringToColour(tag)} key={tag}>
+						{isLongTag ? `${tag.slice(0, SIZE_LIM_TAG)}...` : tag}
+					</Tag>
+				);
         return isLongTag ? (
           <Tooltip title={tag} key={tag}>
             {tagElem}

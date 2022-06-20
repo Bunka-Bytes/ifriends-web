@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import LocaleContext from '../LocaleContext';
 
 export const isEmpty = obj => {
 	return Object.keys(obj).length === 0 && obj.constructor === Object;
@@ -44,21 +44,25 @@ export const dateDifferenceInSeconds = (date1, date2) => {
 export const getDateWithText = (date1, date2) => {
 	let differDatesInDays = dateDifferenceInSeconds(date1, date2);
 
-	let textDate = localStorage.getItem("i18nextLng") === "pt-BR" ? ' segundo' : ' second';
+	let textDate =
+		localStorage.getItem('i18nextLng') === 'pt-BR' ? ' segundo' : ' second';
 
 	if (differDatesInDays >= 60 * 60 * 24) {
 		differDatesInDays /= 60 * 60 * 24;
-		textDate = localStorage.getItem("i18nextLng") === "pt-BR" ? ' dia' : ' day';
+		textDate = localStorage.getItem('i18nextLng') === 'pt-BR' ? ' dia' : ' day';
 	} else if (differDatesInDays >= 60 * 60) {
 		differDatesInDays /= 60 * 60;
-		textDate = localStorage.getItem("i18nextLng") === "pt-BR" ? ' hora' : ' hour';
+		textDate =
+			localStorage.getItem('i18nextLng') === 'pt-BR' ? ' hora' : ' hour';
 	} else if (differDatesInDays >= 60) {
 		differDatesInDays /= 60;
-		textDate = localStorage.getItem("i18nextLng") === "pt-BR" ? ' minuto' : ' minute';
+		textDate =
+			localStorage.getItem('i18nextLng') === 'pt-BR' ? ' minuto' : ' minute';
 	}
 	differDatesInDays = Math.abs(Math.floor(differDatesInDays));
 
-  var string = localStorage.getItem("i18nextLng") === "pt-BR" ? ' atrás' : ' ago';
+	var string =
+		localStorage.getItem('i18nextLng') === 'pt-BR' ? ' atrás' : ' ago';
 	const dateWithText = `${differDatesInDays}${textDate}${
 		differDatesInDays > 1 ? 's' : ''
 	} ${string}`;
