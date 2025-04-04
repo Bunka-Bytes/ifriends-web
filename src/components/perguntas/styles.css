@@ -1,0 +1,13 @@
+@media (min-width: 768px){
+  .button-right{
+    margin-left:auto;
+  }
+}
+
+@media (max-width: 767px){
+  .button-right{
+    padding-left:2rem;
+    padding-right:2rem;
+  }
+}
+

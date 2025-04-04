@@ -1,6 +1,5 @@
-import {
-  postResource
-} from './utils';
-import { CURTIDAS_RESPOSTA } from '../utils/uri-api';
+import { postResource } from './utils'
+import { CURTIDAS_RESPOSTA } from '../utils/uri-api'
 
-export const postCurtidaResposta = (codResposta) => postResource(`${CURTIDAS_RESPOSTA}/${encodeURIComponent(codResposta)}/curtir`);
+export const postCurtidaResposta = (codResposta) =>
+  postResource(`${CURTIDAS_RESPOSTA}/${encodeURIComponent(codResposta)}/curtir`)

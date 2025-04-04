@@ -1,13 +1,9 @@
-import React from 'react';
-import {
-  Card,
-  Divider,
-  Typography
-} from 'antd'
+import React from 'react'
+import { Card, Divider, Typography } from 'antd'
 
 const CardCadastro = (props) => {
   const { Meta } = Card
-  const { Title, Paragraph } = Typography;
+  const { Title, Paragraph } = Typography
 
   return (
     <Card>
@@ -23,7 +19,7 @@ const CardCadastro = (props) => {
 
       {props.children}
     </Card>
-  );
+  )
 }
 
-export default CardCadastro;
+export default CardCadastro

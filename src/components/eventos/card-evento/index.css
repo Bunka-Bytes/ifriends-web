@@ -1,0 +1,20 @@
+.event-card-div{
+  overflow: hidden;
+  height: 12.5rem;
+  position: relative;
+}
+
+.event-card-div-img{
+  height: 100%;
+  min-width: 100%;
+}
+
+.event-card-div-date{
+  position: absolute;
+  right: 5%;
+  top:0;
+  z-index: 100;
+  padding: 0.25rem 1.25rem;
+  border-radius: 0 0 0.75rem 0.75rem;
+  box-shadow: 4px 4px 8px 2px rgba(0, 0, 0, 0.25);
+}

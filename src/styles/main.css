@@ -33,6 +33,10 @@
     --body-font: "Quicksand", sans-serif;
 }
 
+html {
+    overflow-x: hidden !important;
+}
+
 body{
     font-family: var(--body-font);
     background-color: var(--background);
@@ -53,4 +57,8 @@ h5, a{
 
 .card-box{
     border-radius: 0.25rem !important;
+}
+
+.content-margin{
+    margin-top: 1.25rem!important;
 }

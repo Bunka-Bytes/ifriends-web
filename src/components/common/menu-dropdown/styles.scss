@@ -1,0 +1,30 @@
+:global {
+    body .ant-btn-text {
+      width: 100%;
+      display: flex;
+      margin: 1px;
+      justify-content: start;
+    }
+  
+    body .ant-dropdown-menu {
+      background-color: #fff;
+    }
+  
+    body .ant-dropdown-menu-item {
+      padding: 0;
+    }
+    body .ant-btn-text:hover,
+    body .ant-btn-text:focus {
+      color: #1890ff;
+    }
+  }
+  
+  .overlay-item-style:hover {
+    background: #e6f7ff;
+    color: #1890ff;
+  }
+  
+  .overlay-style {
+    background: #fff;
+  }
+  

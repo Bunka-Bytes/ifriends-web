@@ -1,271 +1,293 @@
-import React, { useEffect, useState, createElement } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { t } from 'i18next';
-
+import React, { useEffect, useState, useCallback } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 // ------- STYLES -----
 import './index.css'
 // ------- COMPONENTS -----
 // Antd and Bootstrap
-import Container from 'react-bootstrap/Container';
+import Container from 'react-bootstrap/Container'
+import Alert from 'react-bootstrap/Alert'
 import {
-	Card,
-	Col,
-	Row,
-	Avatar,
-	Tag,
-	Dropdown,
-	Menu,
-	Tooltip,
-	Typography,
-	message
-} from 'antd';
-
+  Card,
+  Col,
+  Row,
+  Avatar,
+  Tooltip,
+  Typography,
+  Image,
+  Divider,
+  Space,
+} from 'antd'
 
 // Created
-import CardPergunta from '../../home/cardPergunta';
 
 // ------ ICONS -----
-import {
-	EditOutlined,
-	LikeFilled,
-	LikeOutlined,
-	StarOutlined
-} from '@ant-design/icons';
-import { FaRegThumbsUp, FaRegComment, FaRegEye } from 'react-icons/fa';
-import { FiMoreVertical, FiTrash2, FiAlertCircle } from 'react-icons/fi';
-import { AiOutlineUser, AiOutlineEdit } from 'react-icons/ai';
+import { AiOutlineUser, AiOutlineUnlock, AiOutlineLock } from 'react-icons/ai'
+import { StopOutlined } from '@ant-design/icons'
 
 // ------ COMMONS ------
-import ListTags from "../../common/list-tags";
-import Button from "../../common/button";
+import ListTags from '../../common/list-tags'
+import ButtonLike from '../../common/button-like'
+import DropdownAcoesUsuario from '../../common/dropdown-acoes'
 
 // Services
-import { getPergunta } from '../../../services/pergunta'; 
-import { getCurtidasUsuario } from '../../../services/usuario'; 
-import { postCurtidaPergunta } from '../../../services/curtidas-pergunta';
-
+import {
+  getPergunta,
+  postPerguntaVisualizacao,
+  patchMarcarRespondida,
+} from '../../../services/pergunta'
 
 // ------ FUNCTIONS ------
-import { getBeetweenDateWithTextForApiDate } from '../../../utils/functions';
-import { isAuthenticated } from '../../../services/auth';
+import {
+  error,
+  getBeetweenDateWithTextForApiDate,
+} from '../../../utils/functions'
+import { isAuthenticated } from '../../../services/auth'
 
 // Destructuring
-const { Meta } = Card;
+const { Meta } = Card
 
-const onClick = ({ key }) => {
-	if (key === '1') {
-		// chamar aqui o metodo de deleção
-	}
-	// pensar num lugar pra colocar as perguntas deletadas
- };
+const Pergunta = (props) => {
+  const { idPergunta } = props
+  const navigate = useNavigate()
+  const [perguntaData, setPerguntaData] = useState({})
+  const { t } = useTranslation()
+  const verficaItemRemovido = (item) => {
+    if (
+      item.deletado === true &&
+      sessionStorage.getItem('@user-email') !== item.usuario.email
+    ) {
+      navigate('/dashboard/')
+      return []
+    } else {
+      return item
+    }
+  }
 
+  const incrementaContadorVisualizacao = useCallback(async () => {
+    if (isAuthenticated()) {
+      try {
+        const request = await postPerguntaVisualizacao(idPergunta)
+        if (request.data === false) return
+      } catch (err) {
+        error()
+      }
+    }
+  }, [idPergunta])
 
+  const getInfosPergunta = useCallback(async () => {
+    try {
+      const request = await getPergunta(idPergunta)
+      incrementaContadorVisualizacao()
 
-const Pergunta = props => {
-	const { idPergunta } = props;
-	const [likes, setLikes] = useState(0);
-	const [action, setAction] = useState('unliked');
-	const [perguntaData, setPerguntaData] = useState({});
-	const [curtidasUsuario, setCurtidasUsuario] = useState([]);
-	const { t } = useTranslation();
+      const dadosPergunta = verficaItemRemovido(request.data)
+      const { dataEmissao, dataAlteracao } = dadosPergunta
 
-	const menu = (
-		<Menu
-			align="start"
-			onClick={onClick}
-			items={[
-				{
-					key: '1',
-					label: t('label-remove-view'),
-					icon: <FiTrash2 />
-				},
+      const pergunta = {
+        key: dadosPergunta.id,
+        id: dadosPergunta.id,
+        titulo: dadosPergunta.titulo,
+        descricao: dadosPergunta.texto,
+        autor: dadosPergunta.usuario.apelido,
+        autorId: dadosPergunta.usuario.id,
+        autorEmail: dadosPergunta.usuario.email,
+        imgPerfil: dadosPergunta.usuario.imagem,
+        imagem:
+          dadosPergunta.imagens.length !== 0 ? dadosPergunta.imagens : null,
+        data: getBeetweenDateWithTextForApiDate(dataEmissao),
+        dataEdicao: getBeetweenDateWithTextForApiDate(dataAlteracao),
+        curtidas: dadosPergunta.qtdCurtida,
+        comentarios: dadosPergunta.qtdResposta,
+        visualizacoes: dadosPergunta.visualizacao,
+        deletado: dadosPergunta.deletado,
+        respondida: dadosPergunta.respondida,
+        nomeCategoria: dadosPergunta.categoria.nome,
+        tags: dadosPergunta.tags,
+      }
 
-				{
-					key: '2',
-					label: t('label-edit'),
-					icon: <AiOutlineEdit />
-				}
-			]}
-		/>
-	);
+      setPerguntaData(pergunta)
+    } catch (err) {
+      error()
+    }
+  }, [idPergunta, verficaItemRemovido, incrementaContadorVisualizacao])
 
-	useEffect(() => {
-		console.log('Busca por id', idPergunta);
-		getPergunta(idPergunta)
-			.then(request => {
-				console.log('dadosPergunta', request.data);
-				let dadosPergunta = request.data;
-				const { dataEmissao } = dadosPergunta;
+  // Buscar dados da pergunta
+  useEffect(() => {
+    getInfosPergunta()
+  }, [])
 
-				let pergunta = {
-					key: dadosPergunta.id,
-					id: dadosPergunta.id,
-					titulo: dadosPergunta.titulo,
-					descricao: dadosPergunta.texto,
-					autor: dadosPergunta.usuario.nome,
-					autorEmail: dadosPergunta.usuario.email,
-					imgPerfil: dadosPergunta.usuario.imagem,
-					data: getBeetweenDateWithTextForApiDate(dataEmissao),
-					curtidas: dadosPergunta.qtdCurtida,
-					comentarios: dadosPergunta.qtdResposta,
-					visualizacoes: Math.ceil(Math.random() * 1000),
-					nomeCategoria: dadosPergunta.categoria.nome,
-					tags: dadosPergunta.tags
-				};
+  const ButtonRespondida = (props) => {
+    const { data } = props
+    const marcarRespondida = () => {
+      patchMarcarRespondida(data.id).then().catch(error)
+      getInfosPergunta()
+    }
+    if (
+      isAuthenticated() &&
+      sessionStorage.getItem('@user-email') === data.autorEmail
+    ) {
+      return (
+        <Col>
+          {data.respondida === false ? (
+            <Tooltip title={`${t('label-answered')}`}>
+              <span
+                id={data.key}
+                className="aceitar-resposta"
+                onClick={marcarRespondida}
+              >
+                {<AiOutlineUnlock onClick={marcarRespondida} size={25} />}
+              </span>
+            </Tooltip>
+          ) : (
+            <Tooltip title={`${t('label-not-answered')}`}>
+              <span
+                id={data.key}
+                className="desaceitar-resposta"
+                onClick={marcarRespondida}
+              >
+                {<AiOutlineLock onClick={marcarRespondida} size={25} />}
+              </span>
+            </Tooltip>
+          )}
+        </Col>
+      )
+    }
+    return <></>
+  }
 
-				setPerguntaData(pergunta);
-			})
-			.catch(error => {
-				console.log(error);
-				return message.error(
-					error.response.data + ' - ' + error.code + ' ' + error.response.status
-				);
-			});
-	}, []);
+  return (
+    <>
+      <Card className="card-box" style={{ marginBottom: '2rem' }}>
+        <Container>
+          <Row justify="space-between" align="middle">
+            {/* Tags da pergunta */}
+            <Col style={{ marginBottom: '0.75rem' }}>
+              <ListTags tags={perguntaData.tags} />
+            </Col>
+            {/* Ações do usuário */}
+            <Col>
+              <DropdownAcoesUsuario
+                targetData={perguntaData}
+                targetAction="pergunta"
+              />
+            </Col>
+          </Row>
+          {/* Informações do autor */}
+          <Row
+            justify="start"
+            align="middle"
+            style={{ marginBottom: '0.75rem' }}
+          >
+            {/* Imagem */}
+            <Col>
+              <Avatar
+                src={perguntaData.imgPerfil || null}
+                icon={<AiOutlineUser />}
+                size="large"
+                className="icons"
+                style={{ marginRight: '1rem', cursor: 'pointer' }}
+                onClick={() => {
+                  navigate(`/perfil/${perguntaData.autorId}`)
+                }}
+              />
+            </Col>
+            <Col>
+              {/* Autor */}
+              <Col>
+                <Link
+                  to={`/perfil/${perguntaData.autorId}`}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <strong>{perguntaData.autor}</strong>
+                </Link>
+              </Col>
+              {/* Data de criação da pergunta */}
+              <Col>
+                <Meta description={<small>{perguntaData.data}</small>} />
+                {perguntaData.dataEdicao !== perguntaData.data ? (
+                  <Tooltip
+                    title={`${t('label-edited-last')} ${
+                      perguntaData.dataEdicao
+                    }`}
+                  >
+                    <small>({t('label-edited')})</small>
+                  </Tooltip>
+                ) : (
+                  <></>
+                )}
+              </Col>
+            </Col>
+          </Row>
 
-	useEffect(() => {
-		if (isAuthenticated()) {
-			getCurtidasUsuario()
-				.then(response => {
-					let curtidas = response.data;
-					console.log('Curtidas:', curtidas);
-					setCurtidasUsuario(curtidas);
+          {/* Informações da pergunta */}
+          <Row style={{ marginTop: '1rem' }}>
+            <Typography.Title level={4}>{perguntaData.titulo}</Typography.Title>
+          </Row>
 
-				})
-				.catch(error => {
-					console.log(error);
-					return message.error(
-						error.response.data + ' - ' + error.code + ' ' + error.response.status
-					);
-				});
-		}
-		return;
-	}, [])
-	
+          {/* Texto da pergunta */}
+          <Row>
+            <Typography.Paragraph>
+              {perguntaData.descricao}
+            </Typography.Paragraph>
+          </Row>
+          {/* Texto da imagens - Trocar para lista de imagens */}
+          {perguntaData.imagem ? (
+            <>
+              <Divider />
+              <Row align="middle" justify="start">
+                <Space size={[8, 16]} wrap>
+                  {perguntaData.imagem.map((image, index) => {
+                    return (
+                      <Image
+                        width={80}
+                        height={80}
+                        src={image.link}
+                        placeholder={
+                          <Image
+                            preview={false}
+                            src="/imgs/fallback/loading-image.gif"
+                            width={80}
+                            height={80}
+                          />
+                        }
+                        key={index}
+                        fallback="/imgs/fallback/not-found-image.jpeg"
+                      />
+                    )
+                  })}
+                </Space>
+              </Row>
+              <Divider />
+            </>
+          ) : (
+            <> </>
+          )}
+          {/* Curtir */}
+          <Row
+            justify="space-between"
+            align="middle"
+            style={{ marginTop: '1rem' }}
+          >
+            <Col xs={4} sm={4} md={2} xl={1}>
+              <ButtonLike targetData={perguntaData} targetLike="pergunta" />
+            </Col>
+            <Col>
+              <ButtonRespondida data={perguntaData} />
+            </Col>
+            {/* Inserir coluna para pergunta exculída */}
+            {perguntaData.deletado === true && (
+              <Col>
+                <Alert variant="danger">
+                  <StopOutlined style={{ marginRight: '0.5rem' }} />
+                  {t('label-question-removed')}
+                </Alert>
+              </Col>
+            )}
+          </Row>
+        </Container>
+      </Card>
+    </>
+  )
+}
 
-	const like = () => {
-		if (isAuthenticated()) {
-			postCurtidaPergunta(perguntaData.id).then(
-				response => {
-					console.log(response.data);
-					if (response.data === true ) {
-						setAction('liked');
-						setLikes(perguntaData.curtidas);
-					}
-					else {
-						setAction('unliked');
-						setLikes(perguntaData.curtidas);
-					}
-				},
-				error => {
-					console.log(error);
-					return message.error(
-						error.response.data +
-							' - ' +
-							error.code +
-							' ' +
-							error.response.status
-					);
-				}
-			);
-		} else {
-			message.info(t('label-authenticate'));
-		}
-	};
-	
-
-	const verifyLike = () => {
-		let verify = curtidasUsuario.filter(
-			curtida => curtida.pergunta.id === perguntaData.id
-		);
-		if (verify.length !== 0) return true;
-		return false;
-	}
-
-	return (
-		<Card className="card-box" style={{ marginBottom: '2rem' }}>
-			<Container>
-				<Row justify="space-between" align="middle">
-					<Col style={{ marginBottom: '0.75rem' }}>
-						<ListTags tags={perguntaData.tags} />
-					</Col>
-					<Col>
-						{isAuthenticated() &&
-						sessionStorage.getItem('@user-email') ===
-							perguntaData.autorEmail ? (
-							<Dropdown overlay={menu} placement="bottomRight" arrow>
-								<a onClick={e => e.preventDefault()}>
-									<FiMoreVertical />
-								</a>
-							</Dropdown>
-						) : (
-							<></>
-						)}
-					</Col>
-				</Row>
-				<Row justify="start" align="middle" style={{ marginBottom: '0.75rem' }}>
-					<Col>
-						<Avatar
-							src={perguntaData.imgPerfil || null}
-							icon={<AiOutlineUser />}
-							size="large"
-							className="icons"
-							style={{ marginRight: '1rem' }}
-						/>
-					</Col>
-					<Col>
-						<Col>
-							<strong>{perguntaData.autor}</strong>
-						</Col>
-						<Col>
-							<Meta description={<small>{perguntaData.data}</small>} />
-						</Col>
-					</Col>
-				</Row>
-
-				<Row style={{ marginTop: '1rem' }}>
-					<Typography.Title level={4}>{perguntaData.titulo}</Typography.Title>
-				</Row>
-
-				<Row>
-					<Typography.Paragraph>{perguntaData.descricao}</Typography.Paragraph>
-				</Row>
-
-				<Row
-					justify="space-between"
-					align="middle"
-					style={{ marginTop: '1rem' }}
-				>
-					<Col xs={4} sm={4} md={2} xl={1}>
-						<Button
-							type="primary"
-							icon={createElement(
-								verifyLike() === true || action === 'liked' ? LikeFilled : LikeOutlined
-							)}
-							onClick={like}
-							label={t('label-like')}
-							ghost
-						/>
-					</Col>
-					<Col>
-						<Button
-							type="primary"
-							icon={
-								<FiAlertCircle
-									color="white"
-									style={{ marginRight: '0.25rem' }}
-								/>
-							}
-							onClick={e => e.preventDefault()}
-							label={t('label-report')}
-							danger
-						/>
-					</Col>
-				</Row>
-			</Container>
-		</Card>
-	);
-};
-
-export default Pergunta;
+export default Pergunta

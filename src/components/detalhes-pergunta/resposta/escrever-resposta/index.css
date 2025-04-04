@@ -1,0 +1,34 @@
+.aceitar-resposta,
+.desaceitar-resposta{
+  display: inline-block;
+  cursor:pointer;
+  transition: all 0.5s;
+  padding: 0.5rem;
+}
+
+.aceitar-resposta:hover,
+.aceitar-resposta:active,
+.aceitar-resposta:focus{
+  color: var(--green);
+}
+
+.desaceitar-resposta:hover,
+.desaceitar-resposta:active,
+.desaceitar-resposta:focus{
+  color: var(--red);
+}
+
+.melhor-resposta{
+  cursor: default;
+  transition: all 0.5s;
+}
+
+.melhor-resposta:hover{
+  color: var(--green)!important;
+  border-color: var(--green)!important;
+}
+
+.melhor-resposta span,
+.melhor-resposta .icon{
+  color: var(--green)!important;
+}

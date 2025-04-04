@@ -37,3 +37,34 @@
 .icon-menu{
     font-size:1.5rem;
 }
+
+@media (max-width: 575px){
+    .menuSupBox .columnMenu {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+
+@media (max-width: 700px){
+    .menuSupBox .logo {
+        display: none !important;
+    }
+
+    /* .menuSupBox .ant-row.ant-row-space-between {
+        justify-content: center !important;
+    } */
+
+    .search-box {
+        width: 90% !important;
+        left: 1.25rem !important
+    }
+}
+
+/* Tab menu */
+@media (min-width: 1200px){
+    .menuSupBox .ant-row .ant-col-xl-12 {
+        display: block;
+        flex: 0 0 0%;
+        max-width: 50%;
+    }
+}

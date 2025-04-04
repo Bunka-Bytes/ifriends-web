@@ -1,8 +1,18 @@
 /* Overiding antd CSS */
 
 /* Layout */
-.ant-layout-content{
-    margin-top: 2rem;
+/* Input */
+.ant-list-lg .ant-list-item {
+    padding: 0 !important;
+}
+
+.search-box .ant-input-affix-wrapper-lg {
+    padding: 10px!important;
+    font-size: 18px !important;
+}
+
+.search-box .ant-input-search-large .ant-input-search-button {
+    height: 51px;
 }
 
 /* Menu */
@@ -39,18 +49,45 @@
 }
 
 .ant-menu-light .ant-menu-item:hover, .ant-menu-light .ant-menu-item-active, .ant-menu-light .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-light .ant-menu-submenu-active, .ant-menu-light .ant-menu-submenu-title:hover, .ant-menu-item-selected {
-    color: var(--purple-medium);
+    color: var(--blue-dark);
 }
 
+/* TAB MENU */
+/* .ant-menu-horizontal > .ant-menu-item::after, .ant-menu-horizontal > .ant-menu-submenu::after{
+    background: var(--blue-dark);
+}
+
+.ant-menu-horizontal > .ant-menu-item-selected a{
+    color: var(--blue-dark);
+}
+
+.ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected::after{
+    border-bottom: 2px solid var(--purple);
+}
+
+.ant-menu-horizontal > .ant-menu-item a:hover{
+    color: var(--purple);
+} */
+
 /* Buttons */
-.ant-btn:hover, .ant-btn:focus{
+.ant-btn:hover, .ant-btn:focus,
+.ant-btn-primary:hover, .ant-btn-primary:focus{
     color: var(--purple-medium);
     border-color: var(--purple)
 }
 
 .ant-btn-icon-only:hover,
-.ant-btn-icon-only:focus {
+.ant-btn-icon-only:focus,
+.ant-btn.ant-btn-link:hover,
+.ant-btn.ant-btn-link:focus,
+.ant-btn.ant-btn-text:hover,
+.ant-btn.ant-btn-text:focus{
     border-color: transparent;
+    background: none;
+}
+
+.ant-btn svg{
+    margin-right: 0.3rem;
 }
 
 /* Primary */
@@ -95,4 +132,95 @@
 
 span.anticon svg {
     vertical-align: baseline;
+}
+
+/* Avatar */
+.ant-avatar.ant-avatar-icon{
+    font-size: 100%;
+}
+
+.ant-avatar.avatar {
+    width: 100%;
+    height: auto;
+}
+
+.ant-avatar.avatar .avatar-default svg{
+    /* width: 200%!important;
+    height: 200%!important; */
+    font-size:5rem;
+    margin: 10% 0;
+    align-self: center;
+}
+
+/* Search box redefinition */
+.search-box .ant-input-search .ant-input-group .ant-input-affix-wrapper:not(:last-child){
+    border-top-left-radius: 0.25rem !important;
+    border-bottom-left-radius: 0.25rem !important;
+}
+
+.search-box .ant-input-group > .ant-input:last-child, .ant-input-group-addon:last-child {
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+.search-box .ant-input-affix-wrapper .ant-input-affix-wrapper-lg{
+    padding: 2rem !important;
+}
+
+/* Slider Carousel */
+.ant-carousel .slick-dots li button {
+    height: 6px !important;
+    background: var(--blue-dark) !important;
+}
+
+.ant-carousel .slick-dots-bottom {
+    bottom: -30px !important;
+}
+
+/* Cards */
+.carousel .ant-card-small > .ant-card-body,
+.carousel .ant-card{
+    cursor: pointer !important;
+    padding: 0rem !important;
+    border-radius: 5px !important;
+    transition: transform 2s;
+}
+
+.carousel .ant-card > .ant-card-body:hover,
+.carousel .ant-card > .ant-card-body:focus,
+.carousel .ant-card > .ant-card-body:active,
+.carousel .ant-card:hover{
+    z-index: 2 !important;
+    background-color: var(--gray-light) !important;
+    border: 1px solid var(--gray) !important;
+    transform: translateY(-2px);
+}
+
+.carousel .ant-card.ant-card-active .ant-card-body{
+  background-color: var(--gray-light) !important;
+  border: 1px solid var(--gray) !important;
+  transform: translateY(-2px);
+  z-index: 2 !important;
+}
+
+.carousel .ant-card .ant-card-inactive{
+  background-color: var(--white) !important;
+}
+
+@media (max-width: 460px){
+    /* .ant-layout-footer .ant-row .logo {
+        display: none !important;
+    } */
+    .ant-layout-footer .ant-col {
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 574px){
+    .ant-layout-footer .ant-row.ant-row-space-around {
+        justify-content: center !important;
+    }
+    .ant-card-small > .ant-card-body{
+        padding: 0 !important;
+    }
 }

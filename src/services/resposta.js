@@ -1,20 +1,28 @@
+import { PERGUNTAS, RESPOSTAS } from '../utils/uri-api'
 import {
+  deleteResource,
   getResource,
   postResource,
   putResource,
-  deleteResource
-} from './utils';
-import { RESPOSTAS } from '../utils/uri-api';
-import { PERGUNTAS } from '../utils/uri-api';
+  patchResource,
+} from './utils'
 
 export const getResposta = (codResposta) =>
-  getResource(`${RESPOSTAS}/${encodeURIComponent(codResposta)}`);
+  getResource(`${RESPOSTAS}/${encodeURIComponent(codResposta)}`)
 
-export const getRespostas = codPergunta =>
-	getResource(`${PERGUNTAS}/${encodeURIComponent(codPergunta)}/respostas`);
+export const getRespostas = (codPergunta) =>
+  getResource(`${PERGUNTAS}/${encodeURIComponent(codPergunta)}/respostas`)
 
-export const postResposta = (resposta) => postResource(`${RESPOSTAS}`, resposta);
+export const getRespostasUsuario = (codUsuario) =>
+  getResource(`${RESPOSTAS}/usuarios/${encodeURIComponent(codUsuario)}`)
 
-export const putResposta = (codResposta, resposta) => putResource(`${RESPOSTAS}/${encodeURIComponent(codResposta)}`, resposta);
+export const postResposta = (resposta) => postResource(`${RESPOSTAS}`, resposta)
 
-export const deleteResposta = (codResposta) => deleteResource(`${RESPOSTAS}/${encodeURIComponent(codResposta)}`);
+export const patchAceitarResposta = (codResposta) =>
+  patchResource(`${RESPOSTAS}/${encodeURIComponent(codResposta)}/aceitar`)
+
+export const putResposta = (codResposta, resposta) =>
+  putResource(`${RESPOSTAS}/${encodeURIComponent(codResposta)}`, resposta)
+
+export const deleteResposta = (codResposta) =>
+  deleteResource(`${RESPOSTAS}/${encodeURIComponent(codResposta)}`)

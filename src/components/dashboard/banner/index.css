@@ -1,0 +1,56 @@
+.card-container-dashboard.card-dashboard {
+    background-image:  url(/public/imgs/banner/banner-bckg-ifriends.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.card-container-dashboard.card-container-dashboard .ant-card-body{
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    filter: none;
+}
+
+ .card-container-dashboard .ant-space .card-title{
+    color: var(--white);
+    font-size: 3rem;
+    font-weight: 700;
+ }
+
+.card-container-dashboard  .ant-card-body{
+  height: 35vh !important; 
+}
+
+.search-box{
+    width: 40vw;
+
+    position: relative;
+    top: -4vh;
+    left: 30vw;
+    z-index: 2;
+}
+
+@media (max-width: 580px){
+  .filter-margin {
+    margin-top: 0.95rem;
+  }
+}
+
+@media (min-width: 1500px){
+  .card-container-dashboard  .ant-card-body{
+      height: 30vh !important; 
+    }
+
+  .search-box{
+      width: 30vw;
+      height: 5vh;
+      position: relative;
+      top: -2vh;
+      left: 35vw;
+      z-index: 2;
+    }
+}
